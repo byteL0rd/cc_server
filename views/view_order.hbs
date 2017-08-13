@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    {{{ headers }}}
+</head>
+
+<body>
+    {{{ navbar }}}
+    <!-- desktop body -->
+    <section class="cc_body">
+        <div class="uk-grid-small  uk-flex-center uk-text-center" uk-grid>
+            <div class="uk-visible@s  uk-text-center" style="padding-left: 2%">
+                {{{ categories }}}
+            </div>
+            <div class="uk-width-expand" style="padding-left: 10%; padding-right: 10%">
+                <div class="uk-card uk-card-default uk-grid-collapse uk-child-width-1-2@s uk-margin" uk-grid>
+                    <div class="uk-card-media-left uk-cover-container">
+                        <img src="/assets/images/23c9d5c32827c457d3f0e498330101ab.jpg" alt="" uk-cover>
+                        <canvas width="200" height="100"></canvas>
+                    </div>
+                    <div>
+                        <div class="uk-card-body">
+                            <h3 class="uk-card-title uk-text-nowrap  uk-text-bold uk-text-small">{{ order.name }}</h3>
+                            <p class="uk-text-small uk-text-meta">{{ order.description }}
+                                <br><br> <span class="uk-text-bold">location: </span> <br> {{order.address}}
+                                <br><span>email: {{ order.email}} </span> <br>
+                                <span style="padding-left: 2%" class="uk-flex uk-flex-left">{{ order.bizPhoneNo }}</span>
+                                <br><br> This cupon  will cost you <span style="color: red; font-style: italic">{{order.cost}} kupos </span>
+                            </p>
+                            <p> <span class="uk-card-title">{{order.cuponType}}</span> <br> <span> {{ order.bizPhoneNo }} </span>                                </p>
+                            <div class="uk-flex uk-flex-right">
+                                <a href="/cupon?id={{order._id}}" style="background-color: rgb(0, 167, 89); color: white" class="uk-button  uk-button-small">view Cupon</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <p> Similar Offers </p>
+                <div class="uk-grid-match" style="padding-bottom: 7%" uk-grid>
+                    {{#each items}}
+                    <div style="padding-bottom: 3%" class="uk-width-1-1@s uk-width-1-2@m uk-width-1-4@m">
+                        <div class="uk-card uk-card-hover uk-card-default">
+                            <div class="uk-card-media-top uk-cover-container">
+                                <img src="{{{img}}}" alt="" uk-cover>
+                                <canvas width="" height=""></canvas>
+                            </div>
+                            <div  class="uk-card-body uk-container uk-padding-remove">
+                                <h3 class="uk-card-title">{{ name }}</h3>
+                                <p>{{description}}</p>
+                                <a  class="uk-button uk-button-default uk-button-small" href="/orders/{{{  _id  }}}">view</a>
+                            </div>
+                        </div>
+                    </div>
+                    {{/each}}
+                </div>
+            </div>
+        </div>
+    </section>
+</body>
+
+</html>

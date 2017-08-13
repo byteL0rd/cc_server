@@ -1,0 +1,9 @@
+{{!--<h4 class="uk-text-bold uk-text-uppercase uk-text-small">Browse Categories</h4>--}}
+{{#each catgs}}
+    <button class="uk-button uk-button-danger uk-button-large uk-width-1-1 uk-margin-small-bottom">{{ name }}</button>
+    {{#each author}}
+        <a class="uk-link-text" href="/orders?cuponType={{this}}">{{ this }}</a> <br>
+    {{/each}}
+    <br>
+{{/each}}
+    <button style="height: 20px" class="uk-button uk-button-danger uk-button-large uk-width-1-1 uk-margin-small-bottom"></button>

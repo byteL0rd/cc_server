@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    {{{ headers }}}
+</head>
+
+<body>
+    {{{ navbar }}}
+    <!-- desktop body -->
+    <section class="cc_body">
+        <div class="uk-grid-small  uk-flex-center uk-text-center" uk-grid>
+            <div class="uk-width-expand  ">
+                <!-- tab navigation -->
+                <div class="uk-flex uk-flex-right">
+                    <a class="uk-link-text" style="padding-right: 10%" href="/login">Login</a>
+                </div>
+                <!-- navigation body -->
+                <div style="padding-top: 3%" class="uk-flex uk-flex-center uk-container">
+                    <!-- login -->
+                    <form role="form" enctype="multipart/form-data" action="/signup" method="post">
+                        <!--<div class="uk-tile uk-tile-primary uk-padding-small">
+                            <p class="uk-h4">Campus Coupons</p>
+                        </div>-->
+                        <img src="assets/cc/cc_logo_002.png" alt="">
+                        <div class="uk-margin">
+                            <div class="uk-inline uk-width-1-1">
+                                <label class="uk-form-icon" uk-icon="icon: user"></label>
+                                <input name="name" class="uk-input" placeholder="john doe" type="text">
+                            </div>
+                        </div>
+                        <div class="uk-margin">
+                            <div class="uk-inline uk-width-1-1">
+                                <span class="uk-form-icon" uk-icon="icon: mail"></span>
+                                <input name="email" class="uk-input" placeholder="john@doe.mail" type="email">
+                            </div>
+                        </div>
+                        <div class="uk-margin">
+                            <div class="uk-inline uk-width-1-1">
+                                <select name="institution" class="uk-select">
+                                <option><span class="uk-icon-flip" uk-icon="icon: pencil"></span> Select Your Instuition</option>
+                                <option>Ladoke akintola</option>
+                                <option>University Of  Ibadan</option>
+                            </select>
+                            </div>
+                        </div>
+                        <div class="uk-margin">
+                            <div class="uk-inline">
+                                <span class="uk-form-icon uk-form-icon" uk-icon="icon: lock"></span>
+                                <input name="password" class="uk-input" type="password" placeholder="password">
+                            </div>
+                        </div>
+                        {{#if err}}
+                        <p style="color: red"> {{ err }}</p>
+                        <br>
+                        {{/if}}
+                        <button type="submit" class="uk-button uk-button-primary uk-button-large uk-text-capitalize">
+                            Sign Up
+                            <span class="uk-icon-flip" uk-icon="icon: sign-in"></span>
+                            </button>
+                        <br>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
+</body>
+
+</html>
