@@ -2,7 +2,7 @@ import { Request, Response } from 'express';
 import * as render from 'express-es6-template-engine';
 import * as path from 'path';
 import { indexPage } from '../views/compiler'
-import { genOrder } from '../../test/faker';
+import { genOrder } from '../../faker';
 import * as faker from 'faker';
 
 import * as keystone from 'keystone';

@@ -1,8 +1,8 @@
 import * as keystone from 'keystone';
 import * as mongoose from 'mongoose';
 
-import { user } from './user';
-import { order } from './order';
+import { user } from './User';
+import { order } from './Order';
 
 const Types = keystone.Field.Types;
 const forum = new keystone.List('Forum', {

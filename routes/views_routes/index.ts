@@ -5,11 +5,12 @@ import { viewLogin, viewSignUp, authLogin, authSignUp, authLogOut } from './auth
 import { viewCreateOrders, viewOrders, viewOrder } from './order';
 import { viewCupon } from './cupon';
 import * as passport from 'passport';
-import { genOrder } from './../../test/faker'
+import { genOrder } from './../../faker';
 import * as keystone from 'keystone';
 import * as session from 'express-session';
 import * as store from 'connect-mongo';
 import * as moment from 'moment';
+import * as compression from 'compression';
 // import * as mongoStore from 'MongoStore';
 const mongostore = store(session)
 
@@ -37,6 +38,8 @@ module.exports = function routes(app: Application) {
     app.use(passport.session())
     // require('./passport')(keystone, app, passport);
     require('../passport/localAuth')(passport, keystone.list('User').model);
+
+    app.use('/*', compression());
 
     app.get('/', index);
 

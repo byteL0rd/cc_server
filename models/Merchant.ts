@@ -6,7 +6,7 @@ const merchant = new keystone.List('Merchant', {
     track: true
 });
 
-import { user } from './user';
+import { user } from './User';
 
 /** Cupon Merchant declaration */
 merchant.add({

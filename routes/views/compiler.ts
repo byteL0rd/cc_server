@@ -3,7 +3,7 @@ import * as handlebar from 'handlebars';
 import * as faker from 'faker';
 import * as keystone from 'keystone';
 import { keys, flattenDeep } from 'lodash';
-import { genUser, genInstit, genOrder, genCupTyp, genImg } from './../../test/faker';
+import { genUser, genInstit, genOrder, genCupTyp, genImg } from './../../faker';
 import { cupon } from '../../models/Cupon';
 import { forum } from '../../models/forum';
 import { merchant } from '../../models/Merchant';

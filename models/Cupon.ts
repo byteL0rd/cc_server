@@ -1,7 +1,7 @@
 import * as keystone from 'keystone';
 import * as mongoose from 'mongoose';
 
-import { order } from './order';
+import { order } from './Order';
 
 const Types = keystone.Field.Types;
 const Cupon = new keystone.List('Cupon', {

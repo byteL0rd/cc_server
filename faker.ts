@@ -1,8 +1,8 @@
 import * as faker from 'faker';
-import { cupon } from './../models/Cupon'
-import { merchant } from './../models/Merchant'
-import { order } from './../models/Order'
-import { user } from './../models/User'
+import { cupon } from './models/Cupon'
+import { merchant } from './models/Merchant'
+import { order } from './models/Order'
+import { user } from './models/User'
 import * as keystone from 'keystone';
 
 export function genImg(): string {

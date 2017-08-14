@@ -1,7 +1,7 @@
 import * as keystone from 'keystone';
 import * as mongoose from 'mongoose';
 
-import { user } from './user'
+import { user } from './User'
 const Types = keystone.Field.Types;
 
 /**
