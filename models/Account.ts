@@ -12,6 +12,7 @@ const Account = new keystone.List('Account', {
 	track: true,
 });
 
+// account model schema declaration
 Account.add({
 	wallet: {
 		type: Types.Number,
@@ -40,5 +41,7 @@ export interface Account extends mongoose.Document {
 	wallet: number;
 	author: string | user
 }
+
+// properties displayed in admin dashboard.
 Account.defaultColumns = 'author, wallet';
 Account.register();

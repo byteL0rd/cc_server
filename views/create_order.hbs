@@ -17,12 +17,12 @@
                     <a href="#"> subcription plan</a>
                 </p>
                 <div class="uk-container">
-                    <form class="uk-grid-small" uk-grid>
-                        <div class="uk-width-1-2@s">
+                    <form  role="form" enctype="multipart/form-data" action="/createorders" method="post" class="uk-grid-small" uk-grid>
+                        <div class="uk-width-1-2@s ">
                             <input class="uk-input" name="name" type="text" placeholder="Name of Business">
                         </div>
                         <div class="uk-width-1-2@s">
-                            <input class="uk-input" name="bizPhoneNo" type="text" placeholder="phone Number">
+                            <input class="uk-input" name="bizPhoneNo" type="number" placeholder="phone Number">
                         </div>
                         <div class="uk-width-1-2@s">
                             <input class="uk-input" name="address" type="text" placeholder="Address of Business">
@@ -30,41 +30,60 @@
                         <div class="uk-width-1-2@s">
                             <input class="uk-input" name="email" type="text" placeholder="Business Email Address">
                         </div>
+                        {{!----}}
+                        <div class="uk-width-1-2@s">
+                            <input class="uk-input" name="number" type="number" placeholder="No of Cupons less or equals 101">
+                        </div>
+                        {{!----}}
                         <div class="uk-width-1-2@s">
                             <input class="uk-input" name="description" type="text" placeholder="Product Description">
-                        </div>
-                        <div class="uk-width-1-2@s">
-                            <textarea class="uk-input" name="info" placeholder="Describe Your Offer" style="height: 170%" rows="" cols=""></textarea>
                         </div>
                         <div class="uk-width-1-2@s">
                             <div class="uk-margin">
                                 <select name="cuponType" class="uk-select">
                                     <option>Select Cupon Type</option>
-                                    <option>Option 02</option>
-                                    <option>Option 02</option>
+                                    {{#each cuponTypes}}
+                                    <option value="{{this}}" >{{this}}</option>
+                                    {{/each}}
+                                </select>
+                            </div>
+                            <div class="uk-margin">
+                                <select name="institution" class="uk-select">
+                                    <option>Select Instution</option>
+                                    {{#each instuts}}
+                                    <option value="{{this}}">{{this}}</option>
+                                    {{/each}}
                                 </select>
                             </div>
                         </div>
-
-                        <div style="padding-top: 7%" class="uk-width-1-2@s">
-                            <div class="uk-margin uk-grid-small uk-child-width-auto" uk-grid>
-                                <label><input class="uk-checkbox" type="checkbox">
-                                 i agree to merchants terms of use  and merchant privacy statement </label>
-                            </div>
+                        <div class="uk-width-1-2@s">
+                            <textarea class="uk-input" name="info" placeholder="Describe Your Offer" style="height: 170%" rows="" cols=""></textarea>
                         </div>
                         <div class="uk-width-1-2@s">
                             <div  class="uk-padding-remove">
                                 <div uk-form-custom="target: true">
-                                    <input name="upload" type="file">
-                                    <input class="uk-input uk-form-width-medium" type="text" placeholder="upload product | service  image" disabled>
+                                    <input name="img" type="file">
+                                    <input name="img" class="uk-input uk-form-width-medium" type="text" placeholder="upload product | service  image" disabled>
                                 </div>
-                                <button class="uk-button uk-button-default">Submit</button>
+                                <button class="uk-button uk-button-default">logo</button>
                             </div>
                         </div>
-                    </form>
-                    <div style="padding-top: 5%; padding-bottom: 5%" class="uk-flex uk-flex-center">
-                        <button class="uk-box-shadow-small  uk-button  uk-button-large" style="background-color: rgb(0, 167, 89); color: white">Submit Cupon</button>
+                        <div style="padding-top: 2%" class="uk-width-1-1@s">
+                            <div class="uk-flex uk-flex-center">
+                                <div class="uk-margin uk-grid-small uk-child-width-auto" uk-grid>
+                                    <label><input class="uk-checkbox" type="checkbox">
+                                    i agree to merchants terms of use  and merchant privacy statement </label>
+                                </div>
+                            </div>
+                        </div>
+                    <div style="padding-top: 3%; padding-bottom: 5%" class= "uk-width-1-1@s uk-flex uk-flex-center">
+                         <button type="submit" class="uk-box-shadow-small  uk-button  uk-button-large" style="background-color: rgb(0, 167, 89); color: white">Submit Cupon</button>
                     </div>
+                    </form>
+                    {{#if err}}
+                    <br>
+                    <p> {{{ err }}} </p>  
+                    {{/if}}
                 </div>
             </div>
         </div>

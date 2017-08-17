@@ -16,7 +16,7 @@
             <div class="uk-width-expand" style="padding-left: 10%; padding-right: 10%">
                 <div class="uk-card uk-card-default uk-grid-collapse uk-child-width-1-2@s uk-margin" uk-grid>
                     <div class="uk-card-media-left uk-cover-container">
-                        <img src="/assets/images/23c9d5c32827c457d3f0e498330101ab.jpg" alt="" uk-cover>
+                        <img src={{{order.img}}} alt="" uk-cover>
                         <canvas width="200" height="100"></canvas>
                     </div>
                     <div>
@@ -29,19 +29,23 @@
                                 <br><br> This cupon  will cost you <span style="color: red; font-style: italic">{{order.cost}} kupos </span>
                             </p>
                             <p> <span class="uk-card-title">{{order.cuponType}}</span> <br> <span> {{ order.bizPhoneNo }} </span>                                </p>
-                            <div class="uk-flex uk-flex-right">
+                             <div class="uk-flex uk-flex-right">
+                                 {{#if isAuth}}
                                 <a href="/cupon?id={{order._id}}" style="background-color: rgb(0, 167, 89); color: white" class="uk-button  uk-button-small">view Cupon</a>
+                                {{else }}
+                                <a href="/login" style="background-color:red; color: white" class="uk-button  uk-button-small">Login To View Cupon</a>
+                                {{/if}}
                             </div>
                         </div>
                     </div>
                 </div>
                 <p> Similar Offers </p>
-                <div class="uk-grid-match" style="padding-bottom: 7%" uk-grid>
+                <div class="uk-grid-match uk-child-width-1-2@s uk-child-width-1-2@m uk-child-width-1-4@l" style="padding-bottom: 7%" uk-grid>
                     {{#each items}}
-                    <div style="padding-bottom: 3%" class="uk-width-1-1@s uk-width-1-2@m uk-width-1-4@m">
+                    <div style="padding-bottom: 3%" class="">
                         <div class="uk-card uk-card-hover uk-card-default">
                             <div class="uk-card-media-top uk-cover-container">
-                                <img src="{{{img}}}" alt="" uk-cover>
+                                <img src={{{img}}} alt="" uk-cover>
                                 <canvas width="" height=""></canvas>
                             </div>
                             <div  class="uk-card-body uk-container uk-padding-remove">
@@ -50,6 +54,34 @@
                                 <a  class="uk-button uk-button-default uk-button-small" href="/orders/{{{  _id  }}}">view</a>
                             </div>
                         </div>
+                    </div>
+                    {{/each}}
+                </div>
+                <div class="uk-flex uk-flex-center">
+                    {{#if isAuth}}
+                <form role="form" enctype="multipart/form-data" action="/review?order={{order._id}}" method="post">
+                    <fieldset class="uk-fieldset">
+                        <legend class="uk-legend"> Comment on Cupon </legend>
+                        <div class="uk-margin">
+                            <textarea  name="comment" class="uk-textarea" cols="80" rows="5" placeholder="i love this cupon really great"></textarea>
+                        </div>
+                        <div class="uk-flex uk-flex-center">
+                            <button type="submit" class="uk-button uk-button-primary uk-button-large uk-text-capitalize">
+                                    Review
+                                    <span class="uk-icon-flip" uk-icon="icon: sign-in"></span>
+                                    </button>
+                        </div>
+                    </fieldset>
+                </form>
+                {{/if}}
+                </div>
+                <div   style="padding-top: 5%; padding-bottom: 5%">
+                    {{#each comments}}
+                        <div style="text-align: right"> {{ author.email }} </div>
+                        {{!--<hr>--}}
+                    <div class="uk-background-muted">
+                        <p class="" style="text-align: left"> {{ comment }} </p>
+                    <hr>
                     </div>
                     {{/each}}
                 </div>

@@ -69,6 +69,7 @@ export function grid(items: order[]): string {
     });
 }
 
+// compilling categories from database
 const _categories = fs.readFileSync('views/partials/categories.hbs').toString();
 export async function categories() {
     const catges = keystone.list('Category').model;
@@ -80,6 +81,7 @@ export async function categories() {
     });
 }
 
+// compling pagination options
 const _paginate = fs.readFileSync('views/partials/paginator.hbs').toString();
 export function paginate(totp: number = 0, cutp: number = 0, query = '') {
     return handlebar.compile(_paginate)({
@@ -101,6 +103,8 @@ interface paging {
     query?: string,
     perPage?: number
 }
+
+// compiling the index page
 export async function indexPage(items: order[], paging: paging, isAuth?: boolean, user?: user): Promise<string> {
     if (items.length < paging.perPage) {
         paging.totp = paging.cutp;
@@ -114,72 +118,81 @@ export async function indexPage(items: order[], paging: paging, isAuth?: boolean
     });
 }
 
+// compiling the login page
 const _login = fs.readFileSync('views/login.hbs').toString() + _footer;
-export async function loginPage(isAuth: boolean = false, err?: string, user?: user): Promise<string> {
+export async function loginPage(isAuth: boolean = false, err?: any, user?: user): Promise<string> {
     return handlebar.compile(_login)({
         headers: _header,
         navbar: await navbar(isAuth, user),
-        err
+        err: (err) ? err.mgs || err.message || err : undefined 
     });
 }
 
-
+// compiling tge signup page
 const _signup = fs.readFileSync('views/signup.hbs').toString() + _footer
 export async function signupPage(isAuth: boolean = false, err?: any, user?: user): Promise<string> {
     return handlebar.compile(_signup)({
         headers: _header,
         navbar: await navbar(isAuth, user),
-        err: (err) ? err.mgs || err.message : undefined 
+        err: (err) ? err.mgs || err.message || err : undefined 
     });
 }
 
+// compiling the order page
 const _order = fs.readFileSync('views/view_order.hbs').toString() + _footer
 export async function orderPage(order: order, isAuth?: boolean, items?: order[], user?: user): Promise<string> {
+const forums = keystone.list('Forum').model;
     if (!order.cost) order.cost = 0;
+    const comments = await forums.find({ order: order._id }).populate('author');    
     return handlebar.compile(_order)({
         items: items,
         headers: _header,
         navbar: await navbar(isAuth, user),
         categories: await categories(),
-        order: order
+        order: order,
+        isAuth,
+        comments
     });
 }
 
+// compiling the create order page
 const _create_order = fs.readFileSync('views/create_order.hbs').toString() + _footer
-export async function createOrderPage(items: order[], isAuth?: boolean, user?: user): Promise<string> {
+export async function createOrderPage(isAuth?: boolean, user?: user, err?: any): Promise<string> {
+    let __cupon_type = await keystone.list('Category').model.find({});
+    __cupon_type = __cupon_type.map((e: any) => e.author);
+    __cupon_type = flattenDeep(__cupon_type);
+
+    let __instut = await keystone.list('Instut').model.find({});
+    __instut = __instut.map((e: any) => e.name)
     return handlebar.compile(_create_order)({
         headers: _header,
-        navbar: await navbar(isAuth, user)
+        navbar: await navbar(isAuth, user),
+        cuponTypes: __cupon_type,
+        instuts: __instut,
+        isAuth: isAuth
     });
 }
 
+// compiling the cupon page
 const _cupon = fs.readFileSync('views/view_cupon.hbs').toString() + _footer
 export async function cuponPage(cupon: cupon, order: order, isAuth: boolean, user?: user): Promise<string> {
     return handlebar.compile(_cupon)({
         headers: _header,
-        navbar: navbar(isAuth, user),
+        navbar: await navbar(isAuth, user),
         cupon,
         order
     });
 }
 
+// // compiling the get token page
 const _get_token = fs.readFileSync('views/get_more_token.hbs').toString() + _footer
 export async function getTokenPage(isAuth?: boolean, user?: user): Promise<string> {
     return handlebar.compile(_get_token)({
         headers: _header,
-        navbar: navbar(isAuth, user),
+        categ: await categories(),
+        navbar: await navbar(isAuth, user),
     });
 }
-
-// const _index = fs.readFileSync('views/index.hbs').toString()
-// export function indexPage(items: order[], isAuth?: boolean, user?: user): string {
-//     return handlebar.compile(_index)({
-//         items: grid(items),
-//         headers:_header,
-//         navbar: navbar(isAuth, user),
-//         categories: categories()
-//     });
-// }
 
 function paginator(totalPage: number, currentPage = 1, noListings = 5, steps = 3) {
     const listings = [];

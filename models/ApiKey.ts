@@ -14,6 +14,7 @@ var Apikey = new keystone.List('Apikey', {
 	track: true,
 });
 
+// apikey model schema declaration
 Apikey.add({
 	key: {
 		type: Types.Text,
@@ -31,6 +32,7 @@ Apikey.add({
 	},
 });
 
+// property to display in the dashboard
 Apikey.defaultColumns = 'author, key';
 Apikey.register();
 

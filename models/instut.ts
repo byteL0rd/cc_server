@@ -11,6 +11,7 @@ var Instut = new keystone.List('Instut', {
     track: true,
 });
 
+// instut schema declaration
 Instut.add({
     name: {
         type: Types.Text,
@@ -26,6 +27,7 @@ Instut.add({
     }
 });
 
+// properties to display in the dashboard
 Instut.defaultColumns = 'name state town';
 Instut.register();
 

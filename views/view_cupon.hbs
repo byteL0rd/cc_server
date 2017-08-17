@@ -13,7 +13,7 @@
             <div class="uk-width-expand" style="padding-left: 10%; padding-right: 10%">
                 <div class="uk-card uk-card-default uk-grid-collapse uk-child-width-1-2@s uk-margin" uk-grid>
                     <div class="uk-card-media-left uk-cover-container">
-                        <img src="assets/images/23c9d5c32827c457d3f0e498330101ab.jpg" alt="" uk-cover>
+                        <img src={{{ order.img }}} alt="" uk-cover>
                         <canvas width="200" height="100"></canvas>
                     </div>
                     <div>
@@ -26,16 +26,15 @@
                             }
                         </style>
                         <div class="uk-card-body">
-                            <h3 class="uk-card-title uk-text-nowrap  uk-text-bold uk-text-small"> TREASURE LAND MAKEUP </h3>
-                            <p class="uk-text-small uk-text-meta">For your makeups, manicure and predicure services with excellent touch
-                                <br><br> <span class="uk-text-bold">location: </span> <br> no 2 ajibola street, campus gate,
-                                ogbomosho.
+                            <h3 class="uk-card-title uk-text-nowrap  uk-text-bold uk-text-small"> {{ order.name }} </h3>
+                            <p class="uk-text-small uk-text-meta">{{order.description}}
+                                <br><br> <span class="uk-text-bold">location: </span> <br> {{ order.address }}
                                 <br>
-                                <span style="padding-left: 2%" class="uk-flex uk-flex-left">081657383920 090378447921</span>
-                                <br><br><span class="uk-text-uppercase cc_d_d uk-text-bold">cupon No:</span> <span class="uk-text-bold cc_d_s"> 002</span>
-                                <br> <span class="uk-text-uppercase cc_d_d uk-text-bold">cupon code: </span> <span  class="uk-text-bold cc_d_s">AB1118393CE</span> <br>
+                                <span style="padding-left: 2%" class="uk-flex uk-flex-left">{{order.bizPhoneNo}}</span>
+                                <br><br><span class="uk-text-uppercase cc_d_d uk-text-bold">cupon No:</span> <span class="uk-text-bold cc_d_s"> {{cupon.number}}</span>
+                                <br> <span class="uk-text-uppercase cc_d_d uk-text-bold">cupon code: </span> <span  class="uk-text-bold uk-text-uppercase cc_d_s ">{{ cupon._id }}</span> <br>
                             </p>
-                            <p> <span class="uk-card-title">20% off  service price</span> <br> <span> TREASURE LAND MAKEUP </span>                                </p>
+                            <p> <span class="uk-card-title">{{order.cuponType}}</span> <br> <span class="uk-text-uppercase"> {{ order.name }} </span>                                </p>
                         </div>
                     </div>
                 </div>

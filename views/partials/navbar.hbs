@@ -23,11 +23,11 @@
                     <img src="/assets/cc/cc_logo_002.png" alt="">
                 </a>
             <ul class="uk-navbar-nav ">
-                <li class="uk-active"><a href="/">Home</a></li>
+                <li class="uk-visible@l uk-active"><a href="/">Home</a></li>
                 <li class="uk-visible@l"><a href="#">About Us</a></li>
                 <li class="uk-visible@l"><a href="#">Contact Us</a></li>
             </ul>
-        </div>
+        </div >
         <div class="uk-navbar-right">
             <!-- desktop search -->
             <form class="uk-visible@m uk-search uk-search-navbar">
@@ -39,14 +39,32 @@
                 <span class="uk-search-icon-flip" uk-search-icon></span>
                 <input class="uk-search-input" type="search" placeholder="save on stores...">
             </form>
-            <ul class="uk-navbar-nav">
+
+                        <ul class="uk-visible@m  uk-navbar-nav" >
                 <li>
-                    <a href="#">Categories</a> {{{ categs }}}
+                    <a href="#" >Categories</a> {{{ categs }}}
                 </li>
                 <li>
-                    <a href="#">Campuses</a> {{{ campuses }}}
+                    <a href="#" >Campuses</a> {{{ campuses }}}
                 </li>
                 {{#if isAuth}}
+                    <li><a href="/createorders" >create cupon</a> </li>
+                    <li><a href="/logout">Log Out</a></li>
+                {{else}}
+                    <li><a href="/login">Login</a></li>
+                    <li><a href="/signup">Join Us</a></li>
+                {{/if}}
+            </ul>
+
+            <ul class="uk-hidden@m uk-navbar-nav" >
+                <li>
+                    <a href="#" style="font-size: 75%" >Categories</a> {{{ categs }}}
+                </li>
+                <li>
+                    <a href="#" style="font-size: 75%" >Campuses</a> {{{ campuses }}}
+                </li>
+                {{#if isAuth}}
+                    <li><a href="/createorders" style="font-size: 75%" >create cupon</a> </li>
                     <li><a href="/logout">Log Out</a></li>
                 {{else}}
                     <li><a href="/login">Login</a></li>
@@ -72,6 +90,7 @@
                 <li><a style="font-size: 50%" href="#">categories</a> {{{ categs }}} </li>
                 <li><a style="font-size: 50%" href="#">Campuses</a> {{{ campuses }}} </li>
                 {{#if isAuth}}
+                <li><a style="font-size: 50%" href="/createorders">create cupon</a> </li>
                 <li><a style="font-size: 50%"  href="/logout">Log Out</a></li>
                 {{else}}
                 <li><a style="font-size: 50%" href="/login">login</a></li>

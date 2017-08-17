@@ -42,18 +42,14 @@ var routes = {
 // Setup Route Bindings
 export function Routes(app: Application) {
 
+	// view routes integration	
 	require('./views_routes')(app);
 
 	// Views
 	// app.get('/', <RequestHandler>routes.views.index);
 	app.all('/contact', <RequestHandler>routes.views.contact);
 
-
-	app.use(`${config.root}/orders/givemecupon`, (req, res) => {
-
-		res.send({ K: 'king custom' });
-	});
-
+	// api routes integration	
 	apiLib(keystone, app, config)
 	// NOTE: To protect a route so that only admins can see it, use the requireUser middleware:
 	// app.get('/protected', middleware.requireUser, routes.views.protected);

@@ -11,7 +11,7 @@ const order = new keystone.List('Order', {
 /** Cupon schema declaration */
 order.add({
     name: <keystone.FieldSpec>{ type: Types.Text, required: true, initial: true, index: true },
-    institution: <keystone.FieldSpec>{ type: Types.Text, required: true, initial: true, index: true },
+    institution: <keystone.FieldSpec>{ type:  Types.Text, required: true, initial: true, index: true },
     bizPhoneNo: <keystone.FieldSpec>{ type: Types.Text, required: true, initial: true, index: true },
     address: <keystone.FieldSpec>{ type: Types.Text, required: true, initial: true, index: true },
     email: <keystone.FieldSpec>{ type: Types.Email, required: true, initial: true, index: true },
@@ -28,9 +28,11 @@ order.add({
     number: <keystone.FieldSpec>{ type: Types.Number, required: true, initial: true },
     remain: <keystone.FieldSpec>{ type: Types.Number, required: true, initial: true },
     cuponType: <keystone.FieldSpec>{ type: Types.Text, required: true, initial: true },
-    img: <keystone.FieldSpec>{ type: Types.Text }
+    finished: <keystone.FieldSpec>{ type: Types.Boolean, default: false },
+    img: { type: Types.CloudinaryImage }
 });
 
+// removes cupons of an order when removed
 order.schema.post('remove', (doc: any, next: any) => {
     let rDoc: order = doc; ///just type safing typescript lol...
     const cupon = keystone.list('Cupon').model;
@@ -39,6 +41,7 @@ order.schema.post('remove', (doc: any, next: any) => {
         .catch(next)
 });
 
+// creates and saves  all cupons of an order
 order.schema.post('save', (doc: any, next: any) => {
     let sDoc: order = doc;
 
@@ -60,12 +63,14 @@ order.schema.post('save', (doc: any, next: any) => {
         }).catch(next);
 });
 
+// takes an order and updates it cupons when updated
 function updateCupons(order: order) {
     const cupon = keystone.list('Cupon').model;
     return cupon.findOneAndUpdate(<cupon>{ order: order._id },
         <cupon>{ cuponType: order.cuponType });
 }
 
+// creates cupons for a saved other
 function createCupons(order: order) {
     const cupon = keystone.list('Cupon').model;
     const listing: cupon[] = [];
@@ -78,6 +83,7 @@ function createCupons(order: order) {
     return cupon.create(listing);
 }
 
+// properties to diplay in admin dashboard
 order.defaultColumns = "cuponType, merchant, number, remain";
 order.register();
 

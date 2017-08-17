@@ -14,6 +14,7 @@ var Category = new keystone.List('Category', {
 	track: true,
 });
 
+// category model schema declaration
 Category.add({
 	name: {
 		type: Types.Text,
@@ -27,6 +28,7 @@ Category.add({
 	},
 });
 
+// property to display in admin
 Category.defaultColumns = 'name';
 Category.register();
 

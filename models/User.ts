@@ -13,6 +13,7 @@ const User = new keystone.List('User', {
 	track: true
 });
 
+// user schma declaration
 User.add({
 	name: <keystone.FieldSpec>{ type: Types.Name, required: true, initial: true, index: true },
 	email: <keystone.FieldSpec>{ type: Types.Email, initial: true, required: true, unique: true, index: true },
@@ -27,7 +28,7 @@ User.schema.virtual('canAccessKeystone').get(function () {
 	return this.isAdmin;
 });
 
-
+// creates  an api key for a user when saved
 User.schema.post('save', (doc: any, next: any) => {
 	const apiKey = keystone.list('Apikey').model;
 	apiKey.findOne(<apikey>{ author: doc._id })
@@ -37,6 +38,7 @@ User.schema.post('save', (doc: any, next: any) => {
 		});
 });
 
+// creates an apikey when updates happens
 function ensureUpdates(doc: user, next) {
 	createAccount(doc._id)
 		.then((e) => createApiKey(doc._id))
@@ -44,12 +46,13 @@ function ensureUpdates(doc: user, next) {
 		.catch(next)
 }
 
-
+// creates an apikey when user is saved
 function createApiKey(_id: string) {
 	const apiKey = keystone.list('Apikey').model;
 	return new apiKey(<apikey>{ author: _id }).save();
 }
 
+// creates an account for the user
 function createAccount(_id: string) {
 	const account = keystone.list('Account').model;
 	return new account(<account>{ author: _id, wallet: 0 }).save();
@@ -71,8 +74,6 @@ export interface User extends mongoose.Document {
 	institution: string;
 }
 
-/**
- * Registration
- */
+// properties to display in admin dashboard
 User.defaultColumns = 'name, email, institution ,isAdmin';
 User.register();

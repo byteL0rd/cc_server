@@ -5,12 +5,15 @@ import { pagingQuery } from './util';
 import { keys } from 'lodash';
 
 const orders = keystone.list('Order') as any
+
+// renders a page to view a order
 export async function viewOrder(req: Request, res: Response) {
     const order:any = await orders.model.findById({ _id: req.params.id });
     const orderList: any = await orders.model.find({}).limit(4);
     res.send(await orderPage(order, req.isAuthenticated(), orderList, req.user));
 }
 
+// renders a page to view orders
 export async function viewOrders(req: Request, res: Response) {
     const query = req.query || {};
     const page = req.query.page;
@@ -33,6 +36,22 @@ export async function viewOrders(req: Request, res: Response) {
     })
 }
 
+// renders the page to create orders
 export async function viewCreateOrders(req: Request, res: Response) {
-    res.send(await createOrderPage([], req.isAuthenticated(), req.user));
+    res.send(await createOrderPage(req.isAuthenticated(), req.user));
+}
+
+// creates order or renders error
+export async function createOrder(req: any, res: Response) {
+    if (!req.files || !req.files.img) return res.send(await createOrderPage(req.isAuthenticated(),
+        req.user, `image is required`))
+    const orders = keystone.list('Order').model;
+    let _newOrder = Object.assign({}, req.body, req.files);
+    _newOrder.remain = _newOrder.number;
+    _newOrder = new orders(_newOrder)
+    _newOrder.save(async (err) => {
+        if (err) return res.send(await createOrderPage(req.isAuthenticated(),
+            req.user, err.Message || err))
+        res.redirect(`/orders/${_newOrder._id}`);
+    })
 }
