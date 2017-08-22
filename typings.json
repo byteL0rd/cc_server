@@ -1,5 +1,8 @@
 {
   "globalDependencies": {
     "faker": "registry:dt/faker#4.1.0+20170308192816"
+  },
+  "dependencies": {
+    "xlsx": "registry:dt/xlsx#0.0.0+20170314180219"
   }
 }

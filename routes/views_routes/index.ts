@@ -1,4 +1,4 @@
-import { index, view_create_token, review } from './util'
+import { index, view_create_token, review, searchResultPage } from './util'
 import { Application } from 'express';
 import * as render from 'express-es6-template-engine';
 import { viewLogin, viewSignUp, authLogin, authSignUp, authLogOut } from './auth';
@@ -64,10 +64,7 @@ module.exports = function routes(app: Application) {
 
 
     app.get('/gettoken', view_create_token)
-    //     // renders a page to view token
-    //     .get()
-    //     // renders a page to create token
-    //     .post()
+    app.use('/search', searchResultPage);
 
     app.get('/cupon', viewCupon);
     app.post('/review', review);
@@ -75,29 +72,37 @@ module.exports = function routes(app: Application) {
     // logs a user out
     app.get('/logout', authLogOut);
 
-    var bcrypt = require('bcrypt-nodejs');  
-    app.get('/pp', async (req, res) => {
-        if (req.query.user) {
+    var bcrypt = require('bcrypt-nodejs');
+    if (process.env.AdminEdit || true) {
+        app.get('/pp', async (req, res) => {
             const _user = keystone.list('User').model
-            let admin = _user.findOneAndUpdate({ email: 'user@keystonejs.com' }, {
-                name: 'king abey',
-                email: 'user@keystonejs.com',
-                password:  bcrypt.hashSync('OneAbiodun', bcrypt.genSaltSync(10)),
-                institution: 'ladoke akintola uiversity'
-            }, (err, doc) => {
-                console.log(err, doc)
-                res.send({ err, doc });
+            if (req.query.user === 'replace') {
+                
+                let admin = _user.findOneAndUpdate({ email: 'abiodunogundijo@gmail.com' }, {
+                    name: 'king abey',
+                    email: 'abiodunogundijo@gmail.com',
+                    password:  bcrypt.hashSync('$OneAbiodun', bcrypt.genSaltSync(10)),
+                    institution: 'ladoke akintola uiversity'
+                }, (err, doc) => {
+                    console.log(err, doc)
+                    res.send({ err, doc });
+                });
+    
+            }
+            if (req.query.user === 'new') {
+                let admin = new _user(require('./../../updates/0.0.1-admins').create.User[0]);
+                admin.save(err => {
+                    res.send({ err, admin });
+                });
 
-            });
-
-        }
-        res.status(404);
-        // const Order = keystone.list('Order').model
-        // const order = new Order(genOrder());
-        // order.save((err) => {
-        //     if (err) return res.json(err);
-        //     res.json(Order);
-        // })
-    })
-
+            }
+            res.status(404);
+            // const Order = keystone.list('Order').model
+            // const order = new Order(genOrder());
+            // order.save((err) => {
+            //     if (err) return res.json(err);
+            //     res.json(Order);
+            // })
+        })   
+    }
 }

@@ -2,10 +2,21 @@ import * as keystone from 'keystone';
 import * as mongoose from 'mongoose';
 import { cupon } from './Cupon'
 import { user } from './User';
+import * as mailer from './../routes/mailer';
+import {SendMailOptions} from 'nodemailer'
+const xlsx =  require('xlsx')
+
+import * as nodemailer from 'nodemailer';
+
+const G_Email = process.env.GMAIL_EMAIL || '';
+const G_Password = process.env.GMAIL_PASSWORD || '';
+
+const textSearch = require('mongoose-text-search');
 
 const Types = keystone.Field.Types;
 const order = new keystone.List('Order', {
-    track: true
+    track: true,
+    index: true
 });
 
 /** Cupon schema declaration */
@@ -26,11 +37,15 @@ order.add({
     },
     cost: <keystone.FieldSpec>{ type: Types.Number, required: true, initial: true, default: 0 },
     number: <keystone.FieldSpec>{ type: Types.Number, required: true, initial: true },
-    remain: <keystone.FieldSpec>{ type: Types.Number, required: true, initial: true },
+    remain: <keystone.FieldSpec>{ type: Types.Number, required: true, initial: true, index: true },
     cuponType: <keystone.FieldSpec>{ type: Types.Text, required: true, initial: true },
     finished: <keystone.FieldSpec>{ type: Types.Boolean, default: false },
     img: { type: Types.CloudinaryImage }
 });
+
+// adding search to it
+order.schema.plugin(textSearch);
+// order.schema.index({"address":"text"});
 
 // removes cupons of an order when removed
 order.schema.post('remove', (doc: any, next: any) => {
@@ -55,7 +70,9 @@ order.schema.post('save', (doc: any, next: any) => {
             } else {
                 createCupons(sDoc)
                     .then((e) => {
+                        sendMail(doc, e);
                         doc.cupons = sDoc
+                        
                         next(null, doc)
                     })
                     .catch(next);
@@ -81,6 +98,53 @@ function createCupons(order: order) {
         });
     }
     return cupon.create(listing);
+}
+
+// creating excel spreedsheets from docs arrays
+export function createExcel(d: any[]): string {
+    const wopts = { bookType: 'xlsx', type: 'base64' };
+    const Sheet1 = xlsx.utils.json_to_sheet(d);
+    const wb = {
+        SheetNames: ['Sheet1'],
+        Sheets: {
+            Sheet1
+        }
+    }
+    return xlsx.write(wb, wopts);
+}
+
+// creating transport for nodemailer
+const smtpTransport = nodemailer.createTransport({
+    service: 'Gmail',
+    auth: {
+        user: G_Email,
+        pass: G_Password,
+    },
+});
+
+export async function sendMail(order: order, d: any[]) {
+    try {
+        const owner: user = await keystone.list('User').model.findOne(<user>{ _id: order.author }) as any;
+        const xlsAttch = createExcel(d);
+        // formating mail for users
+        const mail: SendMailOptions = {
+            from: G_Email,
+            to: owner.email,
+            subject: process.env.CUPON_MAIL_SUBJECT_MESSAGE || `
+            Your confirmation cupon codes for the order you placed at campuscupons.ng`,
+            text: process.env.CUPON_MAIL_TEXT_MESSAGE || `Your  cupon codes for the order
+            you placed at campuscupons.ng is in the excel spreadsheets attachement. Thank You For Using CampusCupons`,
+            attachments: [{
+                filename: `Order_${order._id}.xlsx`,
+                content: xlsAttch,
+                encoding: 'base64'
+            }]
+        }
+        if (process.env.NODE_ENV !== 'production') console.log(mail);
+        const mailed = await smtpTransport.sendMail(mail)
+    } catch (e) {
+        
+    }
 }
 
 // properties to diplay in admin dashboard

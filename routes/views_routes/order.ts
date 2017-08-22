@@ -20,8 +20,9 @@ export async function viewOrders(req: Request, res: Response) {
     delete query.page;
     let _url_query = '';
     keys(query).forEach((e, i) => {
-        _url_query = _url_query + `${e}=${encodeURI(query[e])}&`
-    });
+        _url_query = _url_query + `${e}=${encodeURI(query[e])}`
+        if (i !== keys.length -1 ) _url_query = _url_query + '&'
+    });  
     const orderList: any = await orders.paginate({
 					page: page,
 					perPage: 8,
@@ -31,7 +32,7 @@ export async function viewOrders(req: Request, res: Response) {
             cutp: data.currentPage,
             totp: data.totalPages,
             perPage: 8,
-            query: _url_query
+            query: `/orders?${_url_query}&page=`
         }, req.isAuthenticated(), req.user))
     })
 }

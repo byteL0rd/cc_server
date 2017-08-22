@@ -1,4 +1,6 @@
-var nodemailer = require('nodemailer');
+import * as nodemailer from 'nodemailer';
+
+
 
 var G_Email = process.env.GMAIL_EMAIL;
 var G_Password = process.env.GMAIL_PASSWORD;

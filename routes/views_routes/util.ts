@@ -24,15 +24,32 @@ export interface pagingQuery {
 
 export async function index(req: Request, res: Response) {
     orders.paginate({
-					page: req.query.page || 1,
-					perPage: 8,
-					maxPages: 8,
+        page: req.query.page || 1,
+        perPage: 8,
+        maxPages: 8,
     }).find({ remain: { $gt: 0 } }).exec(async (err, data: pagingQuery) => {
         res.send(await indexPage(data.results, {
             cutp: data.currentPage,
             totp: data.totalPages
         }, req.isAuthenticated(), req.user));
     })
+}
+
+export async function searchResultPage(req: Request, res: Response) {
+    let searchQuery = req.query.query || req.query.q || req.body.query || '';
+    let searchResults = orders.paginate({
+        page: req.query.page || 1,
+        perPage: 8,
+        maxPages: 8,
+    }).find({ $text: { $search: searchQuery } })
+        .exec(async (err, data: pagingQuery) => {
+            res.send(await indexPage(data.results, {
+                cutp: data.currentPage,
+                totp: data.totalPages,
+                perPage: 8,
+                query: `/search?q=${searchQuery}&page=`
+            }, req.isAuthenticated(), req.user, `you have searched ${searchQuery}`));
+        });
 }
 
 export async function view_create_token(req: Request, res: Response) {

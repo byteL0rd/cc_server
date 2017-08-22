@@ -10,7 +10,7 @@
     <!-- desktop body -->
         <section class="cc_body">
         <div class="uk-grid-small  uk-flex-center uk-text-center" uk-grid>
-            <div class="uk-width-expand" style="padding-left: 10%; padding-right: 10%">
+            <div id="cupon_body" class="uk-width-expand" style="padding-left: 10%; padding-right: 10%">
                 <div class="uk-card uk-card-default uk-grid-collapse uk-child-width-1-2@s uk-margin" uk-grid>
                     <div class="uk-card-media-left uk-cover-container">
                         <img src={{{ order.img }}} alt="" uk-cover>
@@ -38,10 +38,22 @@
                         </div>
                     </div>
                 </div>
-                <button style="background-color: rgb(0, 167, 89); color: white" class="uk-button  uk-button-small uk-text-capitalize">Download To Device</button>
+                <button id="downBtn" style="background-color: rgb(0, 167, 89); color: white" class="uk-button  uk-button-small uk-text-capitalize">Download To Device</button>
             </div>
         </div>
     </section>
+    <script src="assets/html2canvas.min.js"></script>
+    <script>
+        {{!-- $('cupon_body') --}}
+        $('#downBtn').on('click', (e) => {
+            console.log(document.getElementById('cupon_body'))
+            html2canvas(document.getElementById('cupon_body'), {
+                onrendered: (canvas) => {
+                    console.log(canvas)
+                }
+            })
+        });
+    </script>
 </body>
 
 </html>

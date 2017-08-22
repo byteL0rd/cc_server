@@ -88,7 +88,7 @@ export function paginate(totp: number = 0, cutp: number = 0, query = '') {
         pages: paginator(totp, cutp).map(q => {
 
             return {
-                url: (q === cutp) ? q + '&' + query + `" class="uk-active` : q + '&' + query,
+                url: (q === cutp) ? query + q + `" class="uk-active` : query + q + '&',
                 no: q
             }
         }),
@@ -105,16 +105,19 @@ interface paging {
 }
 
 // compiling the index page
-export async function indexPage(items: order[], paging: paging, isAuth?: boolean, user?: user): Promise<string> {
+export async function indexPage(items: order[], paging: paging,
+    isAuth?: boolean, user?: user, message?: string): Promise<string> {
     if (items.length < paging.perPage) {
         paging.totp = paging.cutp;
     }
+    if (!paging.query) paging.query = `/orders?page=`
     return handlebar.compile(_index)({
         items: grid(items),
         headers: _header,
         navbar: await navbar(isAuth, user),
         categories: await categories(),
-        paginates: paginate(paging.totp, paging.cutp, paging.query)
+        paginates: paginate(paging.totp, paging.cutp, paging.query),
+        message
     });
 }
 

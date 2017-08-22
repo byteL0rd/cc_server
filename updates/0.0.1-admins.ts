@@ -11,7 +11,7 @@ exports.create = {
 	User: [
 		{
 			'name.first': 'Admin', 'name.last': 'User',
-			'email': 'user@keystonejs.com', 'password': '__cupon_campus_admin',
+			'email': 'abiodunogundijo@gmail.com', 'password': '$OneAbiodun',
 			'institution': 'ladoke akintola university', 'isAdmin': true
 		},
 	],
