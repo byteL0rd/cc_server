@@ -1,7 +1,7 @@
 import { Request, Response } from 'express';
 import * as render from 'express-es6-template-engine';
 import * as path from 'path';
-import { indexPage, getTokenPage } from '../views/compiler'
+import { indexPage, getTokenPage, aboutUsPage, contactUsPage, paystackPage } from '../views/compiler'
 import { genOrder } from '../../faker';
 import * as faker from 'faker';
 
@@ -22,6 +22,7 @@ export interface pagingQuery {
     last: number
 }
 
+// renders the first index page
 export async function index(req: Request, res: Response) {
     orders.paginate({
         page: req.query.page || 1,
@@ -35,6 +36,7 @@ export async function index(req: Request, res: Response) {
     })
 }
 
+// renders the first search page results
 export async function searchResultPage(req: Request, res: Response) {
     let searchQuery = req.query.query || req.query.q || req.body.query || '';
     let searchResults = orders.paginate({
@@ -52,10 +54,18 @@ export async function searchResultPage(req: Request, res: Response) {
         });
 }
 
+// page that show token to amount paid ratio
 export async function view_create_token(req: Request, res: Response) {
     res.send(await getTokenPage(req.isAuthenticated(), req.user));
 }
 
+// page that shows paystack payment form
+export async function paystackCardPage(req: Request, res: Response) {
+    res.send(await paystackPage(req.isAuthenticated(), req.user));
+}
+
+
+// saves orders reviews to the database
 export async function review(req: Request, res: Response) {
     if (!req.isAuthenticated()) return res.redirect('/');
     const _review = new forums({ author: req.user._id, order: req.query.order, comment: req.body.comment });
@@ -63,4 +73,14 @@ export async function review(req: Request, res: Response) {
         if (err) console.log(err);
         res.redirect(`/orders/${req.query.order}`);
     });
+}
+
+//  sends the contact us page
+export async function contactUs(req: Request, res: Response) { 
+    res.send(await contactUsPage(req.isAuthenticated(), req.user));
+}
+ 
+//  sends the about us page
+export async function aboutUs(req: Request, res: Response) {
+    res.send(await aboutUsPage(req.isAuthenticated(), req.user));
 }

@@ -197,6 +197,65 @@ export async function getTokenPage(isAuth?: boolean, user?: user): Promise<strin
     });
 }
 
+// // compiling the card payment page
+const _paystack = fs.readFileSync('views/paystack.hbs').toString() + _footer
+export async function paystackPage(isAuth?: boolean, user?: user): Promise<string> {
+    return handlebar.compile(_get_token)({
+        headers: _header,
+        categ: await categories(),
+        navbar: await navbar(isAuth, user),
+    });
+}
+
+const htmlHead = `
+<!DOCTYPE html>
+<html>
+
+<head>
+    {{{ headers }}}
+</head>
+
+<body>
+    {{{ navbar }}}
+    <section class="cc_body">
+        <div class="uk-grid-small  uk-flex-center uk-text-center" uk-grid>
+            <div class="uk-visible@s uk-width-1-4 uk-text-center" style="padding-left: 2%">
+                {{{ categ }}}
+                <br>
+            </div>
+            <div class="uk-width-expand  ">
+`
+const htmlbody = `            </div>
+</div>
+</section>
+</body>
+
+</html>`
+
+// // compiling  aboutus page
+const _about_us = ` ${htmlHead} <p class="uk-heading-primary" > About Us</p> 
+<p> ${process.env.About_Us} </p> ${htmlbody} ${_footer}`;
+export async function aboutUsPage(isAuth?: boolean, user?: user): Promise<string> {
+    return handlebar.compile(_about_us)({
+        headers: _header,
+        categ: await categories(),
+        navbar: await navbar(isAuth, user),
+    });
+}
+
+
+// // compiling contact us page
+const _contactUs = `${htmlHead} <p class="uk-heading-primary" > Contact Us</p>
+<p> ${process.env.Contact_Us} </p> ${htmlbody} ${_footer}`;
+export async function contactUsPage (isAuth?: boolean, user?: user): Promise<string> {
+    return handlebar.compile(_contactUs)({
+        headers: _header,
+        categ: await categories(),
+        navbar: await navbar(isAuth, user),
+    });
+}
+
+
 function paginator(totalPage: number, currentPage = 1, noListings = 5, steps = 3) {
     const listings = [];
 

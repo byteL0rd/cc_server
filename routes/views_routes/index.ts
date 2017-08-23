@@ -1,4 +1,4 @@
-import { index, view_create_token, review, searchResultPage } from './util'
+import { index, view_create_token, review, searchResultPage, aboutUs, contactUs, paystackCardPage } from './util'
 import { Application } from 'express';
 import * as render from 'express-es6-template-engine';
 import { viewLogin, viewSignUp, authLogin, authSignUp, authLogOut } from './auth';
@@ -64,6 +64,7 @@ module.exports = function routes(app: Application) {
 
 
     app.get('/gettoken', view_create_token)
+    app.get('/gettoken/debitcard', paystackCardPage)
     app.use('/search', searchResultPage);
 
     app.get('/cupon', viewCupon);
@@ -72,8 +73,12 @@ module.exports = function routes(app: Application) {
     // logs a user out
     app.get('/logout', authLogOut);
 
-    var bcrypt = require('bcrypt-nodejs');
-    if (process.env.AdminEdit || true) {
+    app.get('/aboutus', aboutUs);
+    app.get('/contact', contactUs);
+
+
+    if (process.env.AdminEdit === 'enabled') {
+        var bcrypt = require('bcrypt-nodejs');
         app.get('/pp', async (req, res) => {
             const _user = keystone.list('User').model
             if (req.query.user === 'replace') {

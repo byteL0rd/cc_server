@@ -5,16 +5,17 @@
     {{{ headers }}}
 </head>
 
-<body>
+<body id="cupon_body" >
     {{{ navbar }}}
     <!-- desktop body -->
         <section class="cc_body">
         <div class="uk-grid-small  uk-flex-center uk-text-center" uk-grid>
-            <div id="cupon_body" class="uk-width-expand" style="padding-left: 10%; padding-right: 10%">
-                <div class="uk-card uk-card-default uk-grid-collapse uk-child-width-1-2@s uk-margin" uk-grid>
-                    <div class="uk-card-media-left uk-cover-container">
-                        <img src={{{ order.img }}} alt="" uk-cover>
-                        <canvas width="200" height="100"></canvas>
+            <div class="uk-width-expand" style="padding-left: 10%; padding-right: 10%">
+                <div id="cupon_card" class="uk-card uk-card-default uk-grid-collapse uk-child-width-1-2@s uk-margin" uk-grid>
+                    <div class="uk-card-media-left">
+                        {{!-- <img src={{{ order.img.url }}} alt="" uk-cover> --}}
+                        <img class="uk-responsive-width" src={{{ order.img.url }}} alt="" >
+                        {{!-- <canvas width="200" height="100"></canvas> --}}
                     </div>
                     <div>
                         <style>
@@ -39,20 +40,34 @@
                     </div>
                 </div>
                 <button id="downBtn" style="background-color: rgb(0, 167, 89); color: white" class="uk-button  uk-button-small uk-text-capitalize">Download To Device</button>
+                <br> <span style="font-size: 50%"> click the cupon code   or snapshot using phone .... android: vol[-] + power </span>
             </div>
         </div>
     </section>
     <script src="assets/html2canvas.min.js"></script>
+    <script src="assets/FileSaver.min.js"></script>
+    <script src="/assets/canvas-toBlob.js"></script>
     <script>
-        {{!-- $('cupon_body') --}}
-        $('#downBtn').on('click', (e) => {
+        var clicked = false;
+        function snapshot(id) {
+            $(id).on('click', (e) => {
             console.log(document.getElementById('cupon_body'))
-            html2canvas(document.getElementById('cupon_body'), {
+            if (!clicked) {
+                clicked = !clicked;
+                $('#downBtn')[0].disabled = clicked
+                html2canvas(document.getElementById('cupon_body'), {
                 onrendered: (canvas) => {
-                    console.log(canvas)
+                    canvas.toBlob(e => {
+                        saveAs(e, '{{{order.name}}}_{{{order._id}}}.png');
+                        clicked = !clicked;
+                    });
                 }
-            })
+                })
+            }
         });
+        }
+        snapshot('#downBtn')
+        snapshot('#cupon_card')
     </script>
 </body>
 

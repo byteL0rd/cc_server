@@ -30,14 +30,14 @@
         </div >
         <div class="uk-navbar-right">
             <!-- desktop search -->
-            <form class="uk-visible@m uk-search uk-search-navbar">
-                <span uk-search-icon></span>
-                <input class="uk-search-input" type="search" placeholder="save on stores & categories">
+            <form role="form" enctype="multipart/form-data" action="/search" method="post" class="uk-visible@m uk-search uk-search-navbar">
+                <button id="desktop_btn" uk-search-icon ></button>
+                <input id="desktop_input"  name="query"  class="uk-search-input" placeholder="save on stores & categories">
             </form>
             <!-- tablet search -->
-            <form class="uk-hidden@m uk-search">
-                <span class="uk-search-icon-flip" uk-search-icon></span>
-                <input class="uk-search-input" type="search" placeholder="save on stores...">
+            <form role="form" enctype="multipart/form-data" action="/search" method="post" class="uk-hidden@m uk-search">
+                <button id="tablet_btn"  class="uk-search-icon-flip" uk-search-icon></button>
+                <input name="query" id="tablet_input" class="uk-search-input" placeholder="save on stores...">
             </form>
 
                         <ul class="uk-visible@m  uk-navbar-nav" >
@@ -107,9 +107,9 @@
 <!-- mobile search input -->
 <section class="uk-hidden@s uk-flex uk-flex-center uk-container">
     <div>
-        <form class="uk-search uk-search-default">
-            <a href="" class="uk-search-icon-flip" uk-search-icon></a>
-            <input class="uk-search-input" type="search" placeholder="search stores...">
+        <form role="form" enctype="multipart/form-data" action="/search" method="post" class="uk-search uk-search-default">
+            <button id="mobile_btn"  class="uk-search-icon-flip" uk-search-icon></button>
+            <input name="query" id="mobile_input"  class="uk-search-input"  placeholder="search stores...">
         </form>
     </div>
 </section>
