@@ -9,7 +9,7 @@ const orders = keystone.list('Order') as any
 // renders a page to view a order
 export async function viewOrder(req: Request, res: Response) {
     const order:any = await orders.model.findById({ _id: req.params.id });
-    const orderList: any = await orders.model.find({}).limit(4);
+    const orderList: any = await orders.model.find({ activated: 'enabled', remain: { $gt: 0 } }).limit(4);
     res.send(await orderPage(order, req.isAuthenticated(), orderList, req.user));
 }
 
@@ -22,7 +22,9 @@ export async function viewOrders(req: Request, res: Response) {
     keys(query).forEach((e, i) => {
         _url_query = _url_query + `${e}=${encodeURI(query[e])}`
         if (i !== keys.length -1 ) _url_query = _url_query + '&'
-    });  
+    });
+    query.activated = 'enabled';
+    query.remain = { $gt: 0 };
     const orderList: any = await orders.paginate({
 					page: page,
 					perPage: 8,
@@ -49,6 +51,7 @@ export async function createOrder(req: any, res: Response) {
     const orders = keystone.list('Order').model;
     let _newOrder = Object.assign({}, req.body, req.files);
     _newOrder.remain = _newOrder.number;
+    _newOrder.activated = 'disabled';
     _newOrder = new orders(_newOrder)
     _newOrder.save(async (err) => {
         if (err) return res.send(await createOrderPage(req.isAuthenticated(),

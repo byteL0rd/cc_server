@@ -21,28 +21,42 @@
                 <img src="assets/cc/money_pot_002.png" alt="">
                 <br><br><br>
                 <div>
-                    <label><input id="amount" value="100"  name="amount" class="uk-radio" type="radio" checked> get 20Kupos for #100 for 30 days from now</label>
+                    <label><input id="amount_1" value="100"  name="amount" class="uk-radio" type="radio" checked> get 20Kupos for #100 for 30 days from now</label>
                     <br><br>
-                    <label><input id="amount" value="200" name="amount" class="uk-radio" type="radio" > get 50Kupos for #200 for 30 days from now</label>
+                    <label><input id="amount_2" value="200" name="amount" class="uk-radio" type="radio" > get 50Kupos for #200 for 30 days from now</label>
                     <br><br>
-                    <label><input id="amount" value="300" name="amount" class="uk-radio" type="radio" > get 100Kupos for #300 for 30 days from now</label>
+                    <label><input id="amount_3" value="300" name="amount" class="uk-radio" type="radio" > get 100Kupos for #300 for 30 days from now</label>
                     <br><br>
-                    <label><input id="amount" value="400" name="amount" class="uk-radio" type="radio" > get 200Kupos for #400 for 30 days from now</label>
+                    <label><input id="amount_4" value="400" name="amount" class="uk-radio" type="radio" > get 200Kupos for #400 for 30 days from now</label>
                     <br><br>
                     <div class="uk-flex uk-flex-center">
                         <div class="uk-margin">
                         <select id="paymentMethod" class="uk-select">
-                            <option>Select Payment Method</option>
+                            <option value="null">Select Payment Method</option>
                             <option value="debitCard" >Debit Card</option>
                         </select>
                     </div>
                     </div>
                 </div>
                 <div style="padding-top: 3%; padding-bottom: 5%" class="uk-flex uk-flex-center">
-                    <button class="uk-box-shadow-small  uk-button  uk-button-large" style="background-color: rgb(0, 167, 89); color: white">Proceed To Pay</button>
+                    <button id="pay_submit" class="uk-box-shadow-small  uk-button  uk-button-large" style="background-color: rgb(0, 167, 89); color: white">Proceed To Pay</button>
                 </div>
             </div>
         </div>
+                        <script>
+                    var default_value = "100"
+                    function clickRadio(id){
+                        $('#' + id).on('click', function(event) {
+                            default_value = $('#' + id)[0].value ;
+                        });
+                    }
+                    clickRadio('amount_1'); clickRadio('amount_2');
+                    clickRadio('amount_3'); clickRadio('amount_4');
+                    $('#pay_submit').on('click', function(e) {
+                        if ($('#paymentMethod').val() === "null") return alert('please payment method cannot be empty ');
+                        window.location.href = '/payment/' + $('#paymentMethod').val() + '?amount=' + default_value + '&action=gettoken' + '&callbackUrl=' + "{{callbackUrl}}";
+                    });
+                </script>
     </section>
 </body>
 

@@ -11,7 +11,7 @@ const sessAuth = require('keystone/lib/session');
 // renders login page
 export async function viewLogin(req, res: Response) {
     if (req.isAuthenticated()) res.redirect('/');
-    res.send(await loginPage(req.isAuthenticated()))
+    res.send(await loginPage(req.isAuthenticated(), undefined, undefined, req.query.callbackurl))
 }
 
 // renders signup page

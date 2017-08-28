@@ -123,10 +123,11 @@ export async function indexPage(items: order[], paging: paging,
 
 // compiling the login page
 const _login = fs.readFileSync('views/login.hbs').toString() + _footer;
-export async function loginPage(isAuth: boolean = false, err?: any, user?: user): Promise<string> {
+export async function loginPage(isAuth: boolean = false, err?: any, user?: user, callbackurl?: string): Promise<string> {
     return handlebar.compile(_login)({
         headers: _header,
         navbar: await navbar(isAuth, user),
+        callbackurl,
         err: (err) ? err.mgs || err.message || err : undefined 
     });
 }
@@ -189,21 +190,31 @@ export async function cuponPage(cupon: cupon, order: order, isAuth: boolean, use
 
 // // compiling the get token page
 const _get_token = fs.readFileSync('views/get_more_token.hbs').toString() + _footer
-export async function getTokenPage(isAuth?: boolean, user?: user): Promise<string> {
+export async function getTokenPage(isAuth?: boolean, user?: user, callbackUrl?: string): Promise<string> {
     return handlebar.compile(_get_token)({
         headers: _header,
         categ: await categories(),
         navbar: await navbar(isAuth, user),
+        callbackUrl
     });
 }
 
+interface PaymentOptions {
+    action: string,
+    order?: string
+}
 // // compiling the card payment page
 const _paystack = fs.readFileSync('views/paystack.hbs').toString() + _footer
-export async function paystackPage(isAuth?: boolean, user?: user): Promise<string> {
-    return handlebar.compile(_get_token)({
+export async function paystackPage(isAuth?: boolean, user?: user,
+    amount?: string, options?: PaymentOptions): Promise<string> {
+    return handlebar.compile(_paystack)({
         headers: _header,
         categ: await categories(),
         navbar: await navbar(isAuth, user),
+        publicKey: process.env.Paystack_Private_Key,
+        email: user.email,
+        amount: parseInt(amount) * 100,
+        options
     });
 }
 

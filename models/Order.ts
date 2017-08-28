@@ -3,8 +3,8 @@ import * as mongoose from 'mongoose';
 import { cupon } from './Cupon'
 import { user } from './User';
 import * as mailer from './../routes/mailer';
-import {SendMailOptions} from 'nodemailer'
-const xlsx =  require('xlsx')
+import { SendMailOptions } from 'nodemailer'
+const xlsx = require('xlsx')
 
 import * as nodemailer from 'nodemailer';
 
@@ -22,7 +22,7 @@ const order = new keystone.List('Order', {
 /** Cupon schema declaration */
 order.add({
     name: <keystone.FieldSpec>{ type: Types.Text, required: true, initial: true, index: true },
-    institution: <keystone.FieldSpec>{ type:  Types.Text, required: true, initial: true, index: true },
+    institution: <keystone.FieldSpec>{ type: Types.Text, required: true, initial: true, index: true },
     bizPhoneNo: <keystone.FieldSpec>{ type: Types.Text, required: true, initial: true, index: true },
     address: <keystone.FieldSpec>{ type: Types.Text, required: true, initial: true, index: true },
     email: <keystone.FieldSpec>{ type: Types.Email, required: true, initial: true, index: true },
@@ -40,7 +40,8 @@ order.add({
     remain: <keystone.FieldSpec>{ type: Types.Number, required: true, initial: true, index: true },
     cuponType: <keystone.FieldSpec>{ type: Types.Text, required: true, initial: true },
     finished: <keystone.FieldSpec>{ type: Types.Boolean, default: false },
-    img: { type: Types.CloudinaryImage }
+    img: { type: Types.CloudinaryImage },
+    activated: { type: Types.Select, default: 'disabled', options: 'enabled, disabled, approved', emptyOption: false }
 });
 
 // adding search to it
@@ -60,24 +61,48 @@ order.schema.post('remove', (doc: any, next: any) => {
 order.schema.post('save', (doc: any, next: any) => {
     let sDoc: order = doc;
 
-    const cupon = keystone.list('Cupon').model;
-    cupon.findOne(<cupon>{ order: sDoc._id })
-        .then((e) => {
-            if (e) {
-                updateCupons(sDoc)
-                    .then((e) => next(null, doc))
-                    .catch((e) => next(e));
-            } else {
-                createCupons(sDoc)
-                    .then((e) => {
-                        sendMail(doc, e);
-                        doc.cupons = sDoc
-                        
-                        next(null, doc)
-                    })
-                    .catch(next);
+    switch (sDoc.activated) {
+        case 'approved':
+            let m: S_Mail = {
+                subject: `${process.env.SITE_NAME || 'campuscupons.ng'}: Approved Cupon Order  ${sDoc._id}  ${Date.now()}`,
+                html: `your cupon order has been approved. 
+                Please proceed to <a href="www.campuscupons.ng/payment/debitcard?amount=${process.env.OrderPrice}&order=${sDoc._id}&action=approved"><a/>.
+                    Thank You. 
+                    www.campuscupons.ng`
             }
-        }).catch(next);
+            NotifyForPayment(sDoc, m).then(() => next(null, doc)).catch(next)
+            break;
+        case 'enabled':
+            const cupon = keystone.list('Cupon').model;
+            cupon.findOne(<cupon>{ order: sDoc._id })
+                .then((e) => {
+                    if (e) {
+                        updateCupons(sDoc)
+                            .then((e) => next(null, doc))
+                            .catch((e) => next(e));
+                    } else {
+                        createCupons(sDoc)
+                            .then((e) => {
+                                sendMail(doc, e);
+                                doc.cupons = sDoc
+
+                                next(null, doc)
+                            })
+                            .catch(next);
+                    }
+                }).catch(next);
+            break;
+        default:
+            m = {
+                subject: `${process.env.SITE_NAME || 'campuscupons.ng'} for order ${sDoc._id} ${Date.now()}`,
+                text: `your cupon orders has been submitted. 
+            You will be get back from us when your cupon order is approved for payment.
+             Thank You. 
+             www.campuscupons.ng`
+            }
+            NotifyForPayment(sDoc, m).then(() => next(null, doc)).catch(next)
+            break;
+    }
 });
 
 // takes an order and updates it cupons when updated
@@ -122,6 +147,29 @@ const smtpTransport = nodemailer.createTransport({
     },
 });
 
+interface S_Mail {
+    subject: string,
+    text?: string,
+    html?: string
+}
+export async function NotifyForPayment(order: order, mai: S_Mail) {
+    try {
+        const owner: user = await keystone.list('User').model.findOne(<user>{ _id: order.author }) as any;
+        // formating mail for users
+        const mail: SendMailOptions = {
+            from: G_Email,
+            to: owner.email,
+            subject: mai.subject,
+            text: mai.text,
+            attachments: []
+        }
+        if (process.env.NODE_ENV !== 'production') console.log(mail);
+        const mailed = await smtpTransport.sendMail(mail)
+    } catch (e) {
+
+    }
+}
+
 export async function sendMail(order: order, d: any[]) {
     try {
         const owner: user = await keystone.list('User').model.findOne(<user>{ _id: order.author }) as any;
@@ -143,7 +191,7 @@ export async function sendMail(order: order, d: any[]) {
         if (process.env.NODE_ENV !== 'production') console.log(mail);
         const mailed = await smtpTransport.sendMail(mail)
     } catch (e) {
-        
+
     }
 }
 
@@ -165,7 +213,8 @@ export interface order {
     remain: number,
     cost: number,
     cuponType: string,
-    img: string
+    img: string,
+    activated: string,
 }
 
 export interface Order extends mongoose.Document {
@@ -182,5 +231,6 @@ export interface Order extends mongoose.Document {
     remain: number,
     cost: number,
     cuponType: string,
-    img: string
+    img: string,
+    activated: string
 }

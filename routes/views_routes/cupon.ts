@@ -6,6 +6,9 @@ const Order = keystone.list('Order').model;
 const Cupon = keystone.list('Cupon').model;
 const Account = keystone.list('Account').model;
 
+// validates users wallet and act upon it and also 
+// checks the amount remaining and update accordingly
+// and also sends the cupon if all conditons are met
 export async function viewCupon(req: Request, res: Response) {
     if (!req.isAuthenticated()) return res.redirect('/orders/' + req.query.id);
     try {
@@ -27,11 +30,4 @@ export async function viewCupon(req: Request, res: Response) {
         console.log(error);
         res.redirect('/orders');
     }
-}
-
-export async function viewSignUp(req: Request, res: Response) {
-    res.render('signup.html', {
-        locals: {},
-        partials: {}
-    });
 }

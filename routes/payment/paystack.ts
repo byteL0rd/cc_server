@@ -1,8 +1,7 @@
-// const request = require('request-promise');
-const request = function (...args) {
-	return Promise.resolve(args);
-}
-
+const request = require('request-promise');
+// const request = function (...args) {
+// 	return Promise.resolve(args);
+// }
 
 const root = 'https://api.paystack.co';
 const API_KEY = process.env.PAYSTACK_SK_KEY;

@@ -5,23 +5,24 @@
     {{{ headers }}}
 </head>
 
-<body id="cupon_body" >
+<body id="cupon_body">
     {{{ navbar }}}
     <!-- desktop body -->
-        <section class="cc_body">
+    <section class="cc_body">
         <div class="uk-grid-small  uk-flex-center uk-text-center" uk-grid>
             <div class="uk-width-expand" style="padding-left: 10%; padding-right: 10%">
                 <div id="cupon_card" class="uk-card uk-card-default uk-grid-collapse uk-child-width-1-2@s uk-margin" uk-grid>
                     <div class="uk-card-media-left">
                         {{!-- <img src={{{ order.img.url }}} alt="" uk-cover> --}}
-                        <img class="uk-responsive-width" src={{{ order.img.url }}} alt="" >
-                        {{!-- <canvas width="200" height="100"></canvas> --}}
+                        <img class="uk-responsive-width" src={{{ order.img.url }}} alt=""> {{!--
+                        <canvas width="200" height="100"></canvas> --}}
                     </div>
                     <div>
                         <style>
                             .cc_d_d {
                                 color: green;
                             }
+
                             .cc_d_s {
                                 color: black
                             }
@@ -33,12 +34,13 @@
                                 <br>
                                 <span style="padding-left: 2%" class="uk-flex uk-flex-left">{{order.bizPhoneNo}}</span>
                                 <br><br><span class="uk-text-uppercase cc_d_d uk-text-bold">cupon No:</span> <span class="uk-text-bold cc_d_s"> {{cupon.number}}</span>
-                                <br> <span class="uk-text-uppercase cc_d_d uk-text-bold">cupon code: </span> <span  class="uk-text-bold uk-text-uppercase cc_d_s ">{{ cupon._id }}</span> <br>
+                                <br> <span class="uk-text-uppercase cc_d_d uk-text-bold">cupon code: </span> <span class="uk-text-bold uk-text-uppercase cc_d_s ">{{ cupon._id }}</span>                                <br>
                             </p>
                             <p> <span class="uk-card-title">{{order.cuponType}}</span> <br> <span class="uk-text-uppercase"> {{ order.name }} </span>                                </p>
                         </div>
                     </div>
                 </div>
+                <span id="noty" hidden> downloading cupon image please wait </span>
                 <button id="downBtn" style="background-color: rgb(0, 167, 89); color: white" class="uk-button  uk-button-small uk-text-capitalize">Download To Device</button>
                 <br> <span style="font-size: 50%"> click the cupon code   or snapshot using phone .... android: vol[-] + power </span>
             </div>
@@ -48,23 +50,28 @@
     <script src="assets/FileSaver.min.js"></script>
     <script src="/assets/canvas-toBlob.js"></script>
     <script>
+        $('#noty')[0].hidden = true;
         var clicked = false;
         function snapshot(id) {
             $(id).on('click', (e) => {
-            console.log(document.getElementById('cupon_body'))
-            if (!clicked) {
-                clicked = !clicked;
-                $('#downBtn')[0].disabled = clicked
-                html2canvas(document.getElementById('cupon_body'), {
-                onrendered: (canvas) => {
-                    canvas.toBlob(e => {
-                        saveAs(e, '{{{order.name}}}_{{{order._id}}}.png');
-                        clicked = !clicked;
-                    });
+                $('#downBtn')[0].hidden = true;
+                $('#noty')[0].hidden = false;
+                {{!-- console.log(document.getElementById('cupon_body')) --}}
+                if (!clicked) {
+                    clicked = !clicked;
+                    $('#downBtn')[0].disabled = clicked
+                    html2canvas(document.getElementById('cupon_body'), {
+                        onrendered: (canvas) => {
+                            canvas.toBlob(e => {
+                                saveAs(e, '{{{order.name}}}_{{{order._id}}}.png');
+                                clicked = !clicked;
+                                $('#downBtn')[0].hidden = false;
+                                $('#noty')[0].hidden = true;
+                            });
+                        }
+                    })
                 }
-                })
-            }
-        });
+            });
         }
         snapshot('#downBtn')
         snapshot('#cupon_card')

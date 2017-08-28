@@ -3,6 +3,7 @@
 
 <head>
     {{{ headers }}}
+    <script src="https://js.paystack.co/v1/inline.js"></script>
 </head>
 
 <body>
@@ -15,10 +16,26 @@
             </div>
             <div class="uk-width-expand  ">
                 <!-- create a cupon  -->
-                
+                <div id="paystack_EMbed"></div>
             </div>
         </div>
     </section>
+        <script>
+            var action = '{{ options.action }}'
+            PaystackPop.setup({
+                key: "{{ publicKey }}",
+                email: "{{ email }}",
+                amount: {{ amount }},
+                container: "paystack_EMbed",
+                callback: function(response){
+                    if (response.status !== 'true') return;
+                    if (action === 'approved') {
+                        return window.location.href = '/payment/success?action=approved&order={{options.order}}&verify=' + response.reference;
+                    }
+                    return window.location.href = '/payment/success?action=gettoken&verify=' + response.reference;
+                }
+            });
+    </script>
 </body>
 
 </html>

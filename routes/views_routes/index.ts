@@ -1,4 +1,4 @@
-import { index, view_create_token, review, searchResultPage, aboutUs, contactUs, paystackCardPage } from './util'
+import { index, view_create_token, review, searchResultPage, aboutUs, contactUs, paystackCardPage, paymentGateWay } from './util'
 import { Application } from 'express';
 import * as render from 'express-es6-template-engine';
 import { viewLogin, viewSignUp, authLogin, authSignUp, authLogOut } from './auth';
@@ -64,7 +64,8 @@ module.exports = function routes(app: Application) {
 
 
     app.get('/gettoken', view_create_token)
-    app.get('/gettoken/debitcard', paystackCardPage)
+    app.use('/payment/debitcard', paystackCardPage)
+    app.use('/payment/success', paymentGateWay)
     app.use('/search', searchResultPage);
 
     app.get('/cupon', viewCupon);
