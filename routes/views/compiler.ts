@@ -41,11 +41,14 @@ export async function _nav_categories(): Promise<string> {
 // compiling dynamic navbar
 const _navbar = fs.readFileSync('views/partials/navbar.hbs', 'utf8').toString();
 export async function navbar(isAuth: boolean, user?: user): Promise<string> {
+    let author = (!user) ? user : user._id;
+    const token = await keystone.list('Account').model.findOne({ author }) as any;
     return handlebar.compile(_navbar)({
         campuses: await instutions(),
         categs: await _nav_categories(),
         isAuth,
         user,
+        token: (!token) ? token : token.wallet
     });
 }
 

@@ -48,7 +48,7 @@
                     <a href="#" >Campuses</a> {{{ campuses }}}
                 </li>
                 {{#if isAuth}}
-                    <li><a href="/createorders" >create cupon</a> </li>
+                    <li><a href="/createorders" >create coupons</a> </li>
                     <li><a href="/logout">Log Out</a></li>
                 {{else}}
                     <li><a href="/login">Login</a></li>
@@ -64,7 +64,7 @@
                     <a href="#" style="font-size: 75%" >Campuses</a> {{{ campuses }}}
                 </li>
                 {{#if isAuth}}
-                    <li><a href="/createorders" style="font-size: 75%" >create cupon</a> </li>
+                    <li><a href="/createorders" style="font-size: 75%" >create coupons</a> </li>
                     <li><a href="/logout">Log Out</a></li>
                 {{else}}
                     <li><a href="/login">Login</a></li>
@@ -90,7 +90,7 @@
                 <li><a style="font-size: 50%" href="#">categories</a> {{{ categs }}} </li>
                 <li><a style="font-size: 50%" href="#">Campuses</a> {{{ campuses }}} </li>
                 {{#if isAuth}}
-                <li><a style="font-size: 50%" href="/createorders">create cupon</a> </li>
+                <li><a style="font-size: 50%" href="/createorders">create coupons</a> </li>
                 <li><a style="font-size: 50%"  href="/logout">Log Out</a></li>
                 {{else}}
                 <li><a style="font-size: 50%" href="/login">login</a></li>
@@ -103,11 +103,14 @@
 <!-- banner img  -->
 <section class="uk-box-shadow-small">
     <img class="cc_banner" src="/assets/cc/banner_001.png" alt="">
+    {{#if isAuth}}
+        <div class="bck-green"> <span class="uk-flex uk-flex-right" style="color: white">  Your Token: {{token}}Kupo </span> </div>
+    {{/if}}
 </section>
 <!-- mobile search input -->
-<section class="uk-hidden@s uk-flex uk-flex-center uk-container">
+<section class="uk-hidden@s  uk-container">
     <div>
-        <form role="form" enctype="multipart/form-data" action="/search" method="post" class="uk-search uk-search-default">
+        <form role="form" enctype="multipart/form-data" action="/search" method="post" class="uk-search uk-search-default  uk-width-1-1">
             <button id="mobile_btn"  class="uk-search-icon-flip" uk-search-icon></button>
             <input name="query" id="mobile_input"  class="uk-search-input"  placeholder="search stores...">
         </form>

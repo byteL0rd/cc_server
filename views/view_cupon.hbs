@@ -33,16 +33,20 @@
                                 <br><br> <span class="uk-text-bold">location: </span> <br> {{ order.address }}
                                 <br>
                                 <span style="padding-left: 2%" class="uk-flex uk-flex-left">{{order.bizPhoneNo}}</span>
-                                <br><br><span class="uk-text-uppercase cc_d_d uk-text-bold">cupon No:</span> <span class="uk-text-bold cc_d_s"> {{cupon.number}}</span>
-                                <br> <span class="uk-text-uppercase cc_d_d uk-text-bold">cupon code: </span> <span class="uk-text-bold uk-text-uppercase cc_d_s ">{{ cupon._id }}</span>                                <br>
+                                <br><br><span class="uk-text-uppercase cc_d_d uk-text-bold">Coupon No:</span> <span class="uk-text-bold cc_d_s"> {{cupon.number}}</span>
+                                <br> <span class="uk-text-uppercase cc_d_d uk-text-bold">Coupon code: </span> <span class="uk-text-bold uk-text-uppercase cc_d_s ">{{ cupon._id }}</span>                                <br>
                             </p>
                             <p> <span class="uk-card-title">{{order.cuponType}}</span> <br> <span class="uk-text-uppercase"> {{ order.name }} </span>                                </p>
                         </div>
                     </div>
                 </div>
-                <span id="noty" hidden> downloading cupon image please wait </span>
+                <div id="noty">
+                    <div uk-spinner></div> 
+                    <br>
+                    <span  hidden> downloading Coupon image please wait </span>
+                </div>
                 <button id="downBtn" style="background-color: rgb(0, 167, 89); color: white" class="uk-button  uk-button-small uk-text-capitalize">Download To Device</button>
-                <br> <span style="font-size: 50%"> click the cupon code   or snapshot using phone .... android: vol[-] + power </span>
+                <br> <span style="font-size: 50%"> click the Coupon code   or snapshot using phone .... android: vol[-] + power </span>
             </div>
         </div>
     </section>

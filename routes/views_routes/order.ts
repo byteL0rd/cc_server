@@ -3,12 +3,13 @@ import { indexPage, createOrderPage, orderPage } from '../views/compiler';
 import * as keystone from 'keystone';
 import { pagingQuery } from './util';
 import { keys } from 'lodash';
+import * as mongoose from 'mongoose';
 
 const orders = keystone.list('Order') as any
 
 // renders a page to view a order
 export async function viewOrder(req: Request, res: Response) {
-    const order:any = await orders.model.findById({ _id: req.params.id });
+    const order:any = await orders.model.findOne({ _id: req.params.id.toString() });
     const orderList: any = await orders.model.find({ activated: 'enabled', remain: { $gt: 0 } }).limit(4);
     res.send(await orderPage(order, req.isAuthenticated(), orderList, req.user));
 }
