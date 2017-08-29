@@ -157,6 +157,7 @@ const forums = keystone.list('Forum').model;
         navbar: await navbar(isAuth, user),
         categories: await categories(),
         order: order,
+        enabled: (order.activated === 'enabled') ? true : false,
         isAuth,
         comments
     });

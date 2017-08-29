@@ -60,10 +60,11 @@ order.schema.post('remove', (doc: any, next: any) => {
 // creates and saves  all cupons of an order
 order.schema.post('save', (doc: any, next: any) => {
     let sDoc: order = doc;
+    let m: S_Mail;
 
     switch (sDoc.activated) {
         case 'approved':
-            let m: S_Mail = {
+             m = {
                 subject: `${process.env.SITE_NAME || 'campuscupons.ng'}: Approved Cupon Order  ${sDoc._id}  ${Date.now()}`,
                 html: `your cupon order has been approved. 
                 Please proceed to <a href="www.campuscupons.ng/payment/debitcard?amount=${process.env.OrderPrice}&order=${sDoc._id}&action=approved"><a/>.

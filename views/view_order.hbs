@@ -28,14 +28,20 @@
                                 <span style="padding-left: 2%" class="uk-flex uk-flex-left">{{ order.bizPhoneNo }}</span>
                                 <br><br> This Coupon  will cost you <span style="color: red; font-style: italic">{{order.cost}} kupos </span>
                             </p>
-                            <p> <span class="uk-card-title">{{order.cuponType}}</span> <br> <span> {{ order.bizPhoneNo }} </span>                                </p>
-                             <div class="uk-flex uk-flex-right">
+                            <p> <span class="uk-card-title">{{order.cuponType}}</span> <br> <span> {{ order.bizPhoneNo }} </span>    
+                         </p>
+                        {{#if enabled}} 
+                           <div class="uk-flex uk-flex-right">
                                  {{#if isAuth}}
                                 <a href="/cupon?id={{order._id}}" style="background-color: rgb(0, 167, 89); color: white" class="uk-button  uk-button-small">view Coupon</a>
                                 {{else }}
                                 <a href="/login?callbackurl=/orders/{{order._id}}" style="background-color:red; color: white" class="uk-button  uk-button-small">Login To View Cupon</a>
                                 {{/if}}
                             </div>
+                        {{else}} 
+                             <p> order {{ order._id }} mailing notification has been sent but not activated and authorized by the admin. Thank You.  </p>
+                        {{/if}}   
+                             
                         </div>
                     </div>
                 </div>
