@@ -177,6 +177,7 @@ export async function createOrderPage(isAuth?: boolean, user?: user, err?: any):
         navbar: await navbar(isAuth, user),
         cuponTypes: __cupon_type,
         instuts: __instut,
+        err,
         isAuth: isAuth
     });
 }

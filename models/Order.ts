@@ -40,7 +40,7 @@ order.add({
     remain: <keystone.FieldSpec>{ type: Types.Number, required: true, initial: true, index: true },
     cuponType: <keystone.FieldSpec>{ type: Types.Text, required: true, initial: true },
     finished: <keystone.FieldSpec>{ type: Types.Boolean, default: false },
-    img: { type: Types.CloudinaryImage },
+    image_upload: { type: Types.Text },
     activated: { type: Types.Select, default: 'disabled', options: 'enabled, disabled, approved', emptyOption: false }
 });
 
@@ -66,7 +66,7 @@ order.schema.post('save', (doc: any, next: any) => {
         case 'approved':
              m = {
                 subject: `${process.env.SITE_NAME || 'campuscupons.ng'}: Approved Cupon Order  ${sDoc._id}  ${Date.now()}`,
-                html: `your cupon order has been approved. 
+                text: `your cupon order has been approved. 
                 Please proceed to <a href="www.campuscupons.ng/payment/debitcard?amount=${process.env.OrderPrice}&order=${sDoc._id}&action=approved"><a/>.
                     Thank You. 
                     www.campuscupons.ng`
@@ -167,7 +167,7 @@ export async function NotifyForPayment(order: order, mai: S_Mail) {
         if (process.env.NODE_ENV !== 'production') console.log(mail);
         const mailed = await smtpTransport.sendMail(mail)
     } catch (e) {
-
+        console.log(e)
     }
 }
 
@@ -192,7 +192,7 @@ export async function sendMail(order: order, d: any[]) {
         if (process.env.NODE_ENV !== 'production') console.log(mail);
         const mailed = await smtpTransport.sendMail(mail)
     } catch (e) {
-
+        console.log(e)
     }
 }
 

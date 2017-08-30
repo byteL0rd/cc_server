@@ -28,11 +28,11 @@
                 amount: {{ amount }},
                 container: "paystack_EMbed",
                 callback: function(response){
-                    if (response.status !== 'true') return;
+                    console.log(response)
                     if (action === 'approved') {
                         return window.location.href = '/payment/success?action=approved&order={{options.order}}&verify=' + response.reference;
                     }
-                    return window.location.href = '/payment/success?action=gettoken&verify=' + response.reference;
+                    if (action === 'gettoken')return window.location.href = '/payment/success?action=gettoken&verify=' + response.reference;
                 }
             });
     </script>

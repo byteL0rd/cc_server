@@ -45,18 +45,26 @@ export async function viewCreateOrders(req: Request, res: Response) {
     res.send(await createOrderPage(req.isAuthenticated(), req.user));
 }
 
+const cloud = require('cloudinary');
+
 // creates order or renders error
 export async function createOrder(req: any, res: Response) {
-    if (!req.files || !req.files.img) return res.send(await createOrderPage(req.isAuthenticated(),
+    if (!req.isAuthenticated()) return res.redirect('/login');
+    if (!req.files || !req.files.image_upload) return res.send(await createOrderPage(req.isAuthenticated(),
         req.user, `image is required`))
     const orders = keystone.list('Order').model;
-    let _newOrder = Object.assign({}, req.body, req.files);
+    let _newOrder = Object.assign({}, req.body);
     _newOrder.remain = _newOrder.number;
+    _newOrder.author = req.user._id
     _newOrder.activated = 'disabled';
-    _newOrder = new orders(_newOrder)
+    _newOrder.cost = 0;
+    _newOrder = new orders(_newOrder) as any;
+    let image_upload = await cloud.v2.uploader.upload(req.files.image_upload.path);
+    console.log(image_upload)
+    _newOrder.image_upload = image_upload.secure_url;
     _newOrder.save(async (err) => {
         if (err) return res.send(await createOrderPage(req.isAuthenticated(),
-            req.user, err.Message || err))
+            req.user, err.Message || err));
         res.redirect(`/orders/${_newOrder._id}`);
     })
 }
