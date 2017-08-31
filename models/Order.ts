@@ -35,7 +35,7 @@ order.add({
         ref: 'User',
         index: true
     },
-    cost: <keystone.FieldSpec>{ type: Types.Number, required: true, initial: true, default: 0 },
+    cost: <keystone.FieldSpec>{ type: Types.Number, default: 0 },
     number: <keystone.FieldSpec>{ type: Types.Number, required: true, initial: true },
     remain: <keystone.FieldSpec>{ type: Types.Number, required: true, initial: true, index: true },
     cuponType: <keystone.FieldSpec>{ type: Types.Text, required: true, initial: true },

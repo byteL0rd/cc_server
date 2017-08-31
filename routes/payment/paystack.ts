@@ -7,7 +7,7 @@ const root = 'https://api.paystack.co';
 const API_KEY = process.env.PAYSTACK_SK_KEY;
 
 const headers = {
-	Authorization: API_KEY,
+	Authorization: `Bearer ${API_KEY}`,
 };
 
 exports.charge = function (email, amount, number, cvv,

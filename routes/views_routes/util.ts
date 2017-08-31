@@ -106,13 +106,13 @@ export async function pay4Orders(req: Request, res: Response) {
         if (!process.env.OrderPrice) throw ` price is required for approval`;
         const Orders = keystone.list('Order').model;
         let amount: string  = process.env.OrderPrice;
-        const _order = await Orders.findOne({ id: req.query.order, activated: 'approved' }) as any;
+        const _order = await Orders.findOne({ _id: req.query.order, activated: 'approved' }) as any;
         // if (_order == null) throw `order not found or already approved`;
         const verifed = await paystack.verifyTrac(req.query.verify);
-        if (verifed.status !== "true") throw `unverifed transaction code`;
+        if (verifed.status !== true && verifed.data.status === 'success') throw `unverifed transaction code`;
         if (verifed.data.amount !== parseInt(amount) * 100) throw `amount does not equals ${amount} to be paid`;
         _order.activated = 'enabled';
-        const updatedOrder = await Orders.findOneAndUpdate({ id: req.query.order, activated: 'approved' }, _order) as any;
+        const updatedOrder = await Orders.findOneAndUpdate({ _id: req.query.order, activated: 'approved' }, _order) as any;
         res.redirect(`/orders/${updatedOrder._id}`);
     } catch (error) {
         res.send(error);
