@@ -78,7 +78,7 @@ function updateMailList(sDoc, doc, next) {
 function createMailList(sDoc, doc, next) {
     createCupons(sDoc)
     .then((e: any) => {
-        console.log(e)
+        e = remapDocsToList(e);
         sendMail(doc, e)
             .then( d => {
                 console.log(d)
@@ -91,10 +91,17 @@ function createMailList(sDoc, doc, next) {
 
 //  sends mail when an order is approved
 function approved(sDoc, next) {
+    let price;
+    try {
+        price = parseInt(sDoc.number) * parseInt(process.env.OrderPrice);
+        if (parseInt(sDoc.number) < 100) price = parseInt(process.env.OrderPrice) * 10;
+    } catch (error) {
+        price =  parseInt(process.env.OrderPrice) * 10
+    }
     let m = {
-        subject: `${process.env.SITE_NAME || 'campuscupons.ng'}: Approved Cupon Order  ${sDoc._id}  ${Date.now()}`,
+        subject: `${process.env.SITE_NAME || 'campuscoupons.ng'}: Approved Cupon Order  ${sDoc._id}  ${Date.now()}`,
         text: `your cupon order has been approved. 
-        Please proceed to www.campuscupons.ng/payment/debitcard?amount=${process.env.OrderPrice}&order=${sDoc._id}&action=approved 
+        Please proceed to www.campuscoupons.ng/payment/debitcard?amount=${ price }&order=${sDoc._id}&action=approved 
             Thank You. 
             www.campuscupons.ng`
     }
@@ -114,11 +121,11 @@ function enabled(sDoc, next) {
 //  sends mail when an order is created
 function disabled(sDoc, next) {
     let m = {
-        subject: `${process.env.SITE_NAME || 'campuscupons.ng'} for order ${sDoc._id} ${Date.now()}`,
-        text: `your cupon orders has been submitted. 
-    You will be get back from us when your cupon order is approved for payment.
+        subject: `${process.env.SITE_NAME || 'campuscoupons.ng'} for order ${sDoc._id} ${Date.now()}`,
+        text: `your coupon orders has been submitted. 
+    You will be get back from us when your coupon order is approved for payment.
      Thank You. 
-     www.campuscupons.ng`
+     www.campuscoupons.ng`
     }
     NotifyForPayment(sDoc, m).then(() => next(null, sDoc)).catch(next)
 }
@@ -205,8 +212,8 @@ function remapDocsToList(d: cupon[]) {
     return d.map((val: any) => {
         return {
             no: val.number,
-            code: '' + val['_id'] + ' ',
-            order: '' + val['order'] + ' '
+            code: '' + val['_id'] + ' '.toUpperCase(),
+            order: '' + val['order'] + ' '.toUpperCase()
         }
     });
 }
@@ -220,9 +227,9 @@ export async function sendMail(order: order, d: any[]) {
         from: G_Email,
         to: owner.email,
         subject: process.env.CUPON_MAIL_SUBJECT_MESSAGE || `
-        Your confirmation cupon codes for the order you placed at campuscupons.ng`,
-        text: process.env.CUPON_MAIL_TEXT_MESSAGE || `Your  cupon codes for the order
-        you placed at campuscupons.ng is in the excel spreadsheets attachement. Thank You For Using CampusCupons`,
+        Your confirmation cupon codes for the order you placed at campuscoupons.ng`,
+        text: process.env.CUPON_MAIL_TEXT_MESSAGE || `Your  coupon codes for the order
+        you placed at campuscoupons.ng is in the excel spreadsheets attachement. Thank You For Using CampusCupons`,
         attachments: [{
             filename: `Order_${order._id}.xlsx`,
             content: xlsAttch,
@@ -234,7 +241,7 @@ export async function sendMail(order: order, d: any[]) {
 }
 
 // properties to diplay in admin dashboard
-order.defaultColumns = "cuponType, merchant, number, remain";
+order.defaultColumns = "cuponType, number, activated, remain";
 order.register();
 
 export interface order {

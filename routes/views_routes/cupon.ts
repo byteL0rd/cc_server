@@ -25,6 +25,7 @@ export async function viewCupon(req: Request, res: Response) {
         _order = await Order.findByIdAndUpdate(req.query.id, _order)
         const _cupon = await Cupon.findOne({ order: req.query.id, number: _order.remain }) as any;
         if (_order.remain < 1) return res.redirect('/orders');
+        console.log(_order, _cupon)
         res.send(await cuponPage(_cupon, _order, req.isAuthenticated(), req.user));
     } catch (error) {
         console.log(error);
