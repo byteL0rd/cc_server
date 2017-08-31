@@ -57,67 +57,89 @@ order.schema.post('remove', (doc: any, next: any) => {
         .catch(next)
 });
 
+// sends mail when an order is updated
+function updateMailList(sDoc, doc, next) {
+    updateCupons(sDoc)
+        .then((e: any) => {
+        console.log(e)
+        keystone.list('Cupon').model.find({ order: sDoc._id })
+            .then((d: any) => {
+                d = remapDocsToList(d);
+                sendMail(doc, d)
+                .then( d => {
+                    next(null, doc)
+                }).catch( e => next(e));
+            })
+    })
+    .catch((e) => next(e));
+}
+
+// sends mail when a new order is created
+function createMailList(sDoc, doc, next) {
+    createCupons(sDoc)
+    .then((e: any) => {
+        console.log(e)
+        sendMail(doc, e)
+            .then( d => {
+                console.log(d)
+                doc.cupons = sDoc
+                next(null, doc)
+            }).catch(next)
+    })
+    .catch(next);
+}
+
+//  sends mail when an order is approved
+function approved(sDoc, next) {
+    let m = {
+        subject: `${process.env.SITE_NAME || 'campuscupons.ng'}: Approved Cupon Order  ${sDoc._id}  ${Date.now()}`,
+        text: `your cupon order has been approved. 
+        Please proceed to www.campuscupons.ng/payment/debitcard?amount=${process.env.OrderPrice}&order=${sDoc._id}&action=approved 
+            Thank You. 
+            www.campuscupons.ng`
+    }
+    NotifyForPayment(sDoc, m).then(() => next(null, sDoc)).catch(next)
+}
+
+// sends cupon list when an order is enabled
+function enabled(sDoc, next) {
+    const cupon = keystone.list('Cupon').model;
+    cupon.findOne(<cupon>{ order: sDoc._id })
+        .then((e) => {
+            if (e) return updateMailList(sDoc, sDoc, next);
+            return createMailList(sDoc, sDoc, next)
+        }).catch(next);
+}
+
+//  sends mail when an order is created
+function disabled(sDoc, next) {
+    let m = {
+        subject: `${process.env.SITE_NAME || 'campuscupons.ng'} for order ${sDoc._id} ${Date.now()}`,
+        text: `your cupon orders has been submitted. 
+    You will be get back from us when your cupon order is approved for payment.
+     Thank You. 
+     www.campuscupons.ng`
+    }
+    NotifyForPayment(sDoc, m).then(() => next(null, sDoc)).catch(next)
+}
+
 // creates and saves  all cupons of an order
 order.schema.post('save', (doc: any, next: any) => {
-    let sDoc: order = doc;
-    let m: S_Mail;
 
-    switch (sDoc.activated) {
+    switch (doc.activated) {
         case 'approved':
-             m = {
-                subject: `${process.env.SITE_NAME || 'campuscupons.ng'}: Approved Cupon Order  ${sDoc._id}  ${Date.now()}`,
-                text: `your cupon order has been approved. 
-                Please proceed to <a href="www.campuscupons.ng/payment/debitcard?amount=${process.env.OrderPrice}&order=${sDoc._id}&action=approved"><a/>.
-                    Thank You. 
-                    www.campuscupons.ng`
-            }
-            NotifyForPayment(sDoc, m).then(() => next(null, doc)).catch(next)
-            break;
+            return approved(doc, next)
         case 'enabled':
-            const cupon = keystone.list('Cupon').model;
-            cupon.findOne(<cupon>{ order: sDoc._id })
-                .then((e) => {
-                    if (e) {
-                        updateCupons(sDoc)
-                            .then((e: any) => {
-                                sendMail(doc, e)
-                                    .then( d => {
-                                        console.log(d);
-                                        next(null, doc)
-                                    }).catch( e => next(e));
-                            })
-                            .catch((e) => next(e));
-                    } else {
-                        createCupons(sDoc)
-                            .then((e: any) => {
-                                sendMail(doc, e)
-                                    .then( d => {
-                                        console.log(d)
-                                        doc.cupons = sDoc
-                                        next(null, doc)
-                                    }).catch(next)
-                            })
-                            .catch(next);
-                    }
-                }).catch(next);
-            break;
+            return enabled(doc, next);
         default:
-            m = {
-                subject: `${process.env.SITE_NAME || 'campuscupons.ng'} for order ${sDoc._id} ${Date.now()}`,
-                text: `your cupon orders has been submitted. 
-            You will be get back from us when your cupon order is approved for payment.
-             Thank You. 
-             www.campuscupons.ng`
-            }
-            NotifyForPayment(sDoc, m).then(() => next(null, doc)).catch(next)
-            break;
+            return disabled(doc, next);
     }
 });
 
 // takes an order and updates it cupons when updated
 function updateCupons(order: order) {
     const cupon = keystone.list('Cupon').model;
-    return cupon.findOneAndUpdate(<cupon>{ order: order._id },
+    return cupon.update(<cupon>{ order: order._id },
         <cupon>{ cuponType: order.cuponType });
 }
 
@@ -179,8 +201,19 @@ export async function NotifyForPayment(order: order, mai: S_Mail) {
     }
 }
 
+function remapDocsToList(d: cupon[]) {
+    return d.map((val: any) => {
+        return {
+            no: val.number,
+            code: '' + val['_id'] + ' ',
+            order: '' + val['order'] + ' '
+        }
+    });
+}
+
 export async function sendMail(order: order, d: any[]) {
     const owner: user = await keystone.list('User').model.findOne(<user>{ _id: order.author }) as any;
+    console.log(d);
     const xlsAttch = createExcel(d);
     // formating mail for users
     const mail: SendMailOptions = {
