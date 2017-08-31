@@ -89,7 +89,7 @@ export async function aboutUs(req: Request, res: Response) {
 
 // payment gateway
 export async function paymentGateWay(req: Request, res: Response) {
-    // if (req.is )
+    if (!req.isAuthenticated() ) return res.redirect(`/login?callbackurl=${req.originalUrl}`)
     switch (req.query.action) {
         case 'approved':
             return pay4Orders(req, res);
@@ -123,7 +123,7 @@ export async function pay4token(req: Request, res: Response) {
     try {
         if (!req.query.verify) throw 'transcation verification code is required for approval';
         const verifed:any = await paystack.verifyTrac(req.query.verify);
-        if (verifed.status !== "true") throw `unverifed transaction code`;
+        if (verifed.status !== true && verifed.data.status === 'success') throw `unverifed transaction code`;
         let amount = parseInt(verifed.data.amount) / 100; // converting to naira
         if (amount < 100) return addToWallet(amount/ 5);
         if (amount === 100) return addToWallet(20);
@@ -136,10 +136,14 @@ export async function pay4token(req: Request, res: Response) {
     }
     
     async function addToWallet(amount: number) {
-        const Accounts = keystone.list('Account').model;
-        const account: any = await Accounts.findOne({ author: req.user._id}) as any;
-        account.wallet = account.wallet + amount;
-        const updatedAccount = await Accounts.findOneAndUpdate({ author: req.user._id}, account);
-        res.redirect(req.query.callbackurl || '/');
+        try {
+            const Accounts = keystone.list('Account').model;
+            const account: any = await Accounts.findOne({ author: req.user._id }) as any;
+            account.wallet = account.wallet + amount;
+            const updatedAccount = await Accounts.findOneAndUpdate({ author: req.user._id}, account);
+            res.redirect(req.query.callbackurl || '/');
+        } catch (error) {
+            res.send(error);
+        }
     }
  }
