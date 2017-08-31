@@ -79,15 +79,23 @@ order.schema.post('save', (doc: any, next: any) => {
                 .then((e) => {
                     if (e) {
                         updateCupons(sDoc)
-                            .then((e) => next(null, doc))
+                            .then((e: any) => {
+                                sendMail(doc, e)
+                                    .then( d => {
+                                        console.log(d);
+                                        next(null, doc)
+                                    }).catch( e => next(e));
+                            })
                             .catch((e) => next(e));
                     } else {
                         createCupons(sDoc)
-                            .then((e) => {
-                                sendMail(doc, e);
-                                doc.cupons = sDoc
-
-                                next(null, doc)
+                            .then((e: any) => {
+                                sendMail(doc, e)
+                                    .then( d => {
+                                        console.log(d)
+                                        doc.cupons = sDoc
+                                        next(null, doc)
+                                    }).catch(next)
                             })
                             .catch(next);
                     }
@@ -172,28 +180,24 @@ export async function NotifyForPayment(order: order, mai: S_Mail) {
 }
 
 export async function sendMail(order: order, d: any[]) {
-    try {
-        const owner: user = await keystone.list('User').model.findOne(<user>{ _id: order.author }) as any;
-        const xlsAttch = createExcel(d);
-        // formating mail for users
-        const mail: SendMailOptions = {
-            from: G_Email,
-            to: owner.email,
-            subject: process.env.CUPON_MAIL_SUBJECT_MESSAGE || `
-            Your confirmation cupon codes for the order you placed at campuscupons.ng`,
-            text: process.env.CUPON_MAIL_TEXT_MESSAGE || `Your  cupon codes for the order
-            you placed at campuscupons.ng is in the excel spreadsheets attachement. Thank You For Using CampusCupons`,
-            attachments: [{
-                filename: `Order_${order._id}.xlsx`,
-                content: xlsAttch,
-                encoding: 'base64'
-            }]
-        }
-        if (process.env.NODE_ENV !== 'production') console.log(mail);
-        const mailed = await smtpTransport.sendMail(mail)
-    } catch (e) {
-        console.log(e)
+    const owner: user = await keystone.list('User').model.findOne(<user>{ _id: order.author }) as any;
+    const xlsAttch = createExcel(d);
+    // formating mail for users
+    const mail: SendMailOptions = {
+        from: G_Email,
+        to: owner.email,
+        subject: process.env.CUPON_MAIL_SUBJECT_MESSAGE || `
+        Your confirmation cupon codes for the order you placed at campuscupons.ng`,
+        text: process.env.CUPON_MAIL_TEXT_MESSAGE || `Your  cupon codes for the order
+        you placed at campuscupons.ng is in the excel spreadsheets attachement. Thank You For Using CampusCupons`,
+        attachments: [{
+            filename: `Order_${order._id}.xlsx`,
+            content: xlsAttch,
+            encoding: 'base64'
+        }]
     }
+    if (process.env.NODE_ENV !== 'production') console.log(mail);
+    return smtpTransport.sendMail(mail)
 }
 
 // properties to diplay in admin dashboard
