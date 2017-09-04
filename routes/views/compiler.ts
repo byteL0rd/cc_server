@@ -249,8 +249,12 @@ const htmlbody = `            </div>
 </html>`
 
 // // compiling  aboutus page
-const _about_us = ` ${htmlHead} <p class="uk-heading-primary" > About Us</p> 
-<p> ${process.env.About_Us} </p> ${htmlbody} ${_footer}`;
+const _about_us = ` ${htmlHead} 
+<p class="uk-heading-primary" > About Us</p> 
+<p> ${process.env.About_Us || 'we are the great cuopons suplier'} </p> <br><br>
+<p class="uk-heading-primary" > Contact Us</p>
+<p> ${process.env.Contact_Us || 'email us at campouscuponsng@gmail.com'} </p> <br><br>
+ ${htmlbody} ${_footer}`;
 export async function aboutUsPage(isAuth?: boolean, user?: user): Promise<string> {
     return handlebar.compile(_about_us)({
         headers: _header,
