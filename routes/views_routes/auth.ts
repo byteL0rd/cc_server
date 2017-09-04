@@ -27,7 +27,8 @@ export async function viewSignUp(req: Request, res: Response) {
     }
 
     async function onfail(err: any) {
-        res.send(await errPage(req.isAuthenticated(), err.message || err));
+        err = (err) ? err.message : err;
+        res.send(await errPage(req.isAuthenticated(), err));
     }
     return sessAuth.signin({email: req.body.email, password: req.body.password }, req, res, onsucess, onfail)
 }
