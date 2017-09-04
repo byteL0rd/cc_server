@@ -1,7 +1,7 @@
 import { Request, Response } from 'express';
 import { indexPage, createOrderPage, orderPage } from '../views/compiler';
 import * as keystone from 'keystone';
-import { pagingQuery } from './util';
+import { pagingQuery, mapDefaultPQuery } from './util';
 import { keys } from 'lodash';
 import * as mongoose from 'mongoose';
 
@@ -10,7 +10,8 @@ const orders = keystone.list('Order') as any
 // renders a page to view a order
 export async function viewOrder(req: Request, res: Response) {
     const order:any = await orders.model.findOne({ _id: req.params.id.toString() });
-    const orderList: any = await orders.model.find({ activated: 'enabled', remain: { $gt: 0 } }).limit(4);
+    let orderList: any = await orders.model.find({ activated: 'enabled', remain: { $gt: 0 } }).limit(4);
+    orderList = (!orderList) ? [] : orderList;
     res.send(await orderPage(order, req.isAuthenticated(), orderList, req.user));
 }
 
@@ -31,7 +32,10 @@ export async function viewOrders(req: Request, res: Response) {
 					perPage: 8,
 					maxPages: 4,
     }).find(query).exec(async (err, data: pagingQuery) => {
-        res.send(await indexPage(data.results, {
+        let results = [];
+        data = mapDefaultPQuery(data);
+        results = (!data.results) ? [] : results;
+        res.send(await indexPage(results, {
             cutp: data.currentPage,
             totp: data.totalPages,
             perPage: 8,

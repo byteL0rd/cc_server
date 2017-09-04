@@ -22,6 +22,23 @@ export interface pagingQuery {
     last: number
 }
 
+//  sets default paging querys
+export function mapDefaultPQuery(data:pagingQuery) : pagingQuery {
+    if (!data) data =  {
+        currentPage: 1,
+        first: 1,
+        last: 1,
+        next: 1,
+        previous: false,
+        pages: [1],
+        results: [],
+        total: 1,
+        totalPages: 1
+    }
+    data.results = (!data.results) ? [] : data.results
+    return data;
+}
+
 // renders the first index page
 export async function index(req: Request, res: Response) {
     orders.paginate({
@@ -29,7 +46,10 @@ export async function index(req: Request, res: Response) {
         perPage: 8,
         maxPages: 8,
     }).find({ remain: { $gt: 0 }, activated: 'enabled' }).exec(async (err, data: pagingQuery) => {
-        res.send(await indexPage(data.results, {
+        let results = [];
+        data = mapDefaultPQuery(data);
+        results = (!data.results) ? [] : results;
+        res.send(await indexPage(results, {
             cutp: data.currentPage,
             totp: data.totalPages
         }, req.isAuthenticated(), req.user));
@@ -45,7 +65,10 @@ export async function searchResultPage(req: Request, res: Response) {
         maxPages: 8,
     }).find({ $text: { $search: searchQuery }, remain: { $gt: 0 }, activated: 'enabled' })
         .exec(async (err, data: pagingQuery) => {
-            res.send(await indexPage(data.results, {
+        let results = [];
+        data = mapDefaultPQuery(data);
+        results = (!data.results) ? [] : results;
+            res.send(await indexPage(results, {
                 cutp: data.currentPage,
                 totp: data.totalPages,
                 perPage: 8,
