@@ -22,7 +22,8 @@ export async function viewSignUp(req: Request, res: Response) {
 
 // authenicate user login request and renders err to the login page if any
  function AuthCated(req, res, errPage, mgs?:any) {
-    function onsucess(user) {
+    async function onsucess(user) {
+        // if (req.body.name) await keystone.list('User').model.findOneAndUpdate({req.user._id}, {name: req.body.name})
         res.redirect(req.query.callbackurl || req.body.callbackurl || '/')
     }
 
@@ -39,7 +40,10 @@ export function authLogin(req: Request, res: Response, next: NextFunction) {
 }
 
 // sign's up a new user and renders err to the signup page if any
-export function authSignUp(req: Request, res: Response, next: NextFunction) {
+export async function authSignUp(req: Request, res: Response, next: NextFunction) {
+    if (req.body.password !== req.body.confirmPassword) {
+        return res.send(await signupPage(false, `passwords doesn't match for confirmation`))
+    }
     signUp(req, req.body.email, req.body.password, done);
     
     async function done(isAuth, user, err) {

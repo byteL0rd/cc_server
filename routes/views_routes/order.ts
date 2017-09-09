@@ -35,7 +35,7 @@ export async function viewOrders(req: Request, res: Response) {
         let results = [];
         data = mapDefaultPQuery(data);
         results = (!data.results) ? [] : results;
-        res.send(await indexPage(results, {
+        res.send(await indexPage(data.results, {
             cutp: data.currentPage,
             totp: data.totalPages,
             perPage: 8,

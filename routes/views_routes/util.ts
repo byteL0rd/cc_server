@@ -46,11 +46,11 @@ export async function index(req: Request, res: Response) {
         perPage: 8,
         maxPages: 8,
     }).find({ remain: { $gt: 0 }, activated: 'enabled' }).exec(async (err, data: pagingQuery) => {
-        console.log(data.results);
+        // console.log(data.results);
         let results = [];
         data = mapDefaultPQuery(data);
         results = (!data.results) ? [] : results;
-        res.send(await indexPage(results, {
+        res.send(await indexPage(data.results, {
             cutp: data.currentPage,
             totp: data.totalPages
         }, req.isAuthenticated(), req.user));
@@ -69,7 +69,7 @@ export async function searchResultPage(req: Request, res: Response) {
         let results = [];
         data = mapDefaultPQuery(data);
         results = (!data.results) ? [] : results;
-            res.send(await indexPage(results, {
+            res.send(await indexPage(data.results, {
                 cutp: data.currentPage,
                 totp: data.totalPages,
                 perPage: 8,
