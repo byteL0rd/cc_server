@@ -23,7 +23,7 @@ export async function viewSignUp(req: Request, res: Response) {
 // authenicate user login request and renders err to the login page if any
  function AuthCated(req, res, errPage, mgs?:any) {
     async function onsucess(user) {
-        // if (req.body.name) await keystone.list('User').model.findOneAndUpdate({req.user._id}, {name: req.body.name})
+        if (req.body.name) await keystone.list('User').model.findOneAndUpdate({ _id: req.user._id }, { name: req.body.name });
         res.redirect(req.query.callbackurl || req.body.callbackurl || '/')
     }
 
