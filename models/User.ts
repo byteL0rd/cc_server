@@ -15,7 +15,7 @@ const User = new keystone.List('User', {
 
 // user schma declaration
 User.add({
-	name: <keystone.FieldSpec>{ type: Types.Name, required: true, initial: true, index: true },
+	name: <keystone.FieldSpec>{ type: Types.Name, initial: true, index: true },
 	email: <keystone.FieldSpec>{ type: Types.Email, initial: true, required: true, unique: true, index: true },
 	password: { type: Types.Password, initial: true, required: true, min: 8 },
 	institution: <keystone.FieldSpec>{ type: Types.Text, required: true, initial: true },

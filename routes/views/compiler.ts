@@ -138,9 +138,12 @@ export async function loginPage(isAuth: boolean = false, err?: any, user?: user,
 // compiling tge signup page
 const _signup = fs.readFileSync('views/signup.hbs').toString() + _footer
 export async function signupPage(isAuth: boolean = false, err?: any, user?: user): Promise<string> {
+    let __instut = await keystone.list('Instut').model.find({});
+    __instut = __instut.map((e: any) => e.name)
     return handlebar.compile(_signup)({
         headers: _header,
         navbar: await navbar(isAuth, user),
+        instuts: __instut || [],
         err: (err) ? err.mgs || err.message || err : undefined 
     });
 }
@@ -169,7 +172,6 @@ export async function createOrderPage(isAuth?: boolean, user?: user, err?: any):
     let __cupon_type = await keystone.list('Category').model.find({});
     __cupon_type = __cupon_type.map((e: any) => e.author);
     __cupon_type = flattenDeep(__cupon_type);
-
     let __instut = await keystone.list('Instut').model.find({});
     __instut = __instut.map((e: any) => e.name)
     return handlebar.compile(_create_order)({
