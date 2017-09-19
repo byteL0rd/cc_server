@@ -169,7 +169,7 @@ const forums = keystone.list('Forum').model;
 // compiling the create order page
 const _create_order = fs.readFileSync('views/create_order.hbs').toString() + _footer
 export async function createOrderPage(isAuth?: boolean, user?: user, err?: any): Promise<string> {
-    let __cupon_type = await keystone.list('Category').model.find({});
+    let __cupon_type = await keystone.list('Category').model.find({}) as any;
     // __cupon_type = __cupon_type.map((e: any) => e.author);//
     // __cupon_type = flattenDeep(__cupon_type);
     let __instut = await keystone.list('Instut').model.find({});
@@ -178,6 +178,7 @@ export async function createOrderPage(isAuth?: boolean, user?: user, err?: any):
         headers: _header,
         navbar: await navbar(isAuth, user),
         cuponTypes: __cupon_type,
+        selected: (__cupon_type[0]) ? __cupon_type[0].name : '',
         instuts: __instut,
         err,
         isAuth: isAuth

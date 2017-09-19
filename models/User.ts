@@ -55,7 +55,7 @@ function createApiKey(_id: string) {
 // creates an account for the user
 function createAccount(_id: string) {
 	const account = keystone.list('Account').model;
-	return new account(<account>{ author: _id, wallet: 0 }).save();
+	return new account(<account>{ author: _id, wallet: 20 }).save();
 }
 
 export interface user {

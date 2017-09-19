@@ -183,8 +183,9 @@ export function createExcel(d: any[]): string {
     return xlsx.write(wb, wopts);
 }
 
+
 // creating transport for nodemailer
-const smtpTransport = nodemailer.createTransport({
+export const smtpTransport = nodemailer.createTransport({
     service: 'Gmail',
     auth: {
         user: G_Email,

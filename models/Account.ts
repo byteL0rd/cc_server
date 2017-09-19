@@ -18,7 +18,7 @@ Account.add({
 		type: Types.Number,
 		required: true,
 		initial: true,
-		default: 10,
+		default: 20,
 	},
 	author: {
 		type: Types.Relationship,
