@@ -38,15 +38,27 @@
                         <div class="uk-width-1-2@s">
                             <input class="uk-input" name="description" type="text" placeholder="Product Description">
                         </div>
+                        {{!--  --}}
                         <div class="uk-width-1-2@s">
                             <div class="uk-margin">
-                                <select name="cuponType" class="uk-select">
-                                    <option>Select Coupon  Type</option>
+                                <select name="category" class="uk-select">
+                                    <option>Select Category</option>
                                     {{#each cuponTypes}}
-                                    <option value="{{this}}" >{{this}}</option>
+                                    <option id="{{ name }}" value="{{name}}" >{{name}}</option>
                                     {{/each}}
                                 </select>
                             </div>
+                            <div class="uk-margin">
+                                {{#each cuponTypes }}
+                                <select id="select_{{name}}" name="cuponType" class="uk-select" multiple >
+                                    <option>Select Coupon  Type</option>
+                                    {{#each author}}
+                                    <option value="{{this}}" >{{this}}</option>
+                                    {{/each}}
+                                </select>
+                                {{/each}}
+                            </div>
+                            {{!--  --}}
                             <div class="uk-margin">
                                 <select name="institution" class="uk-select">
                                     <option>Select Instution</option>
@@ -87,6 +99,26 @@
             </div>
         </div>
     </section>
+    <script>
+
+        var selected = '{{cuponTypes[0].name}}';
+
+        function setCuponTypes (order){
+            $('#' + order).on('click', function(){
+                $('#select_' + selected ).hide();
+                $('#select_' + order ).show();
+                selected = order;
+            });
+        };
+
+        $(document).on('ready', function(){
+            $('#select_' + selected ).show();
+            {{#each cuponTypes}}
+                setCuponTypes('{{name}}')
+            {{/each}}
+
+        });
+    </script>
 </body>
 
 </html>

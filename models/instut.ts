@@ -24,6 +24,9 @@ Instut.add({
     },
     state: {
         type: Types.Text
+    },
+    image: {
+        type: Types.CloudinaryImage
     }
 });
 

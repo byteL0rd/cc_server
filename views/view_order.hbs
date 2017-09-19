@@ -22,7 +22,7 @@
                     <div>
                         <div class="uk-card-body">
                             <h3 class="uk-card-title uk-text-nowrap  uk-text-bold uk-text-small">{{ order.name }}</h3>
-                            <p class="uk-text-small uk-text-meta">{{ order.description }}
+                            <p class="uk-card-title uk-text-nowrap  uk-text-bold uk-text-small">{{ order.description }}
                                 <br><br> <span class="uk-text-bold">location: </span> <br> {{order.address}}
                                 <br><span>email: {{ order.email}} </span> <br>
                                 <span style="padding-left: 2%" class="uk-flex uk-flex-left">{{ order.bizPhoneNo }}</span>
@@ -35,7 +35,7 @@
                                  {{#if isAuth}}
                                 <a href="/cupon?id={{order._id}}" style="background-color: rgb(0, 167, 89); color: white" class="uk-button  uk-button-small">view Coupon</a>
                                 {{else }}
-                                <a href="/login?callbackurl=/orders/{{order._id}}" style="background-color:red; color: white" class="uk-button  uk-button-small">Login To View Cupon</a>
+                                <a href="/login?callbackurl=/orders/{{order._id}}" style="background-color: rgb(219,49, 60); color: white" class="uk-button  uk-button-small">Login To View Cupon</a>
                                 {{/if}}
                             </div>
                         {{else}} 
@@ -45,6 +45,7 @@
                         </div>
                     </div>
                 </div>
+                <p> <span>Details</span> <br> {{ order.info }} </p>
                 <p> Similar Offers </p>
                 <div class="uk-grid-match uk-child-width-1-2@s uk-child-width-1-2@m uk-child-width-1-4@l" style="padding-bottom: 7%" uk-grid>
                     {{#each items}}
@@ -83,7 +84,7 @@
                 </div>
                 <div   style="padding-top: 5%; padding-bottom: 5%">
                     {{#each comments}}
-                        <div style="text-align: right"> {{ author.email }} </div>
+                        <div style="text-align: right"> {{ author.name }} </div>
                         {{!--<hr>--}}
                     <div class="uk-background-muted">
                         <p class="" style="text-align: left"> {{ comment }} </p>

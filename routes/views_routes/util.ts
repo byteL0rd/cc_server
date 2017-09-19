@@ -41,11 +41,13 @@ export function mapDefaultPQuery(data:pagingQuery) : pagingQuery {
 
 // renders the first index page
 export async function index(req: Request, res: Response) {
+    let findQuery = { remain: { $gt: 0 }, activated: 'enabled' };
+    if (req.isAuthenticated()) findQuery['institution'] = req.user.institution;
     orders.paginate({
         page: req.query.page || 1,
         perPage: 8,
         maxPages: 8,
-    }).find({ remain: { $gt: 0 }, activated: 'enabled' }).exec(async (err, data: pagingQuery) => {
+    }).find(findQuery).exec(async (err, data: pagingQuery) => {
         // console.log(data.results);
         let results = [];
         data = mapDefaultPQuery(data);
@@ -60,12 +62,16 @@ export async function index(req: Request, res: Response) {
 // renders the first search page results
 export async function searchResultPage(req: Request, res: Response) {
     let searchQuery = req.query.query || req.query.q || req.body.query || '';
+    let queryFind = {
+        $text: { $search: searchQuery }, remain: { $gt: 0 }, activated: 'enabled'
+    };
     let searchResults = orders.paginate({
         page: req.query.page || 1,
         perPage: 8,
         maxPages: 8,
-    }).find({ $text: { $search: searchQuery }, remain: { $gt: 0 }, activated: 'enabled' })
+    }).find(queryFind)
         .exec(async (err, data: pagingQuery) => {
+        console.log(data);
         let results = [];
         data = mapDefaultPQuery(data);
         results = (!data.results) ? [] : results;

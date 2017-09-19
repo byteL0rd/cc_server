@@ -16,7 +16,7 @@ export async function viewCupon(req: Request, res: Response) {
         if (_order.cost > 0) {
             let account = await Account.findOne({ author: req.user._id }) as any;
             account.wallet = account.wallet - _order.cost;
-            if (account.wallet < 0) return res.redirect(`/orders/${req.query.id}`);
+            if (account.wallet < 0) return res.redirect(`/gettoken?callbackurl=/orders/${req.query.id}`);
             account = await Account.findOneAndUpdate({ author: req.user._id }, account);
         }
         if (_order === {} || _order == undefined ) return res.redirect('/orders')

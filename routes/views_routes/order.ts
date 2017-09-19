@@ -35,7 +35,6 @@ export async function viewOrders(req: Request, res: Response) {
         let results = [];
         data = mapDefaultPQuery(data);
         results = (!data.results) ? [] : results;
-        console.log(data);
         res.send(await indexPage(data.results, {
             cutp: data.currentPage,
             totp: data.totalPages,
@@ -54,6 +53,7 @@ const cloud = require('cloudinary');
 
 // creates order or renders error
 export async function createOrder(req: any, res: Response) {
+    console.log(req.body);
     if (!req.isAuthenticated()) return res.redirect('/login');
     if (!req.files || !req.files.image_upload) return res.send(await createOrderPage(req.isAuthenticated(),
         req.user, `image is required`))

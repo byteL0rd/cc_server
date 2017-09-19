@@ -5,8 +5,10 @@ import { user } from './User';
 import * as mailer from './../routes/mailer';
 import { SendMailOptions } from 'nodemailer'
 const xlsx = require('xlsx')
-
 import * as nodemailer from 'nodemailer';
+import * as faker from 'faker'
+import { orderBy } from 'lodash';
+
 
 const G_Email = process.env.GMAIL_EMAIL || '';
 const G_Password = process.env.GMAIL_PASSWORD || '';
@@ -38,7 +40,8 @@ order.add({
     cost: <keystone.FieldSpec>{ type: Types.Number, default: 0 },
     number: <keystone.FieldSpec>{ type: Types.Number, required: true, initial: true },
     remain: <keystone.FieldSpec>{ type: Types.Number, required: true, initial: true, index: true },
-    cuponType: <keystone.FieldSpec>{ type: Types.Text, required: true, initial: true },
+    cuponType: <keystone.FieldSpec>{ type: Types.TextArray},
+    category: <keystone.FieldSpec>{ type: Types.Text },
     finished: <keystone.FieldSpec>{ type: Types.Boolean, default: false },
     image_upload: { type: Types.Text },
     activated: { type: Types.Select, default: 'disabled', options: 'enabled, disabled, approved', emptyOption: false }
@@ -46,7 +49,10 @@ order.add({
 
 // adding search to it
 order.schema.plugin(textSearch);
-// order.schema.index({"address":"text"});
+order.schema.index({
+    "name": "text", "institution": "text", "cuponType": "text",
+    "category": "text", "description": "text",  "info": "text",  "address": "text", 
+});
 
 // removes cupons of an order when removed
 order.schema.post('remove', (doc: any, next: any) => {
@@ -157,7 +163,8 @@ function createCupons(order: order) {
     for (var i = 0; i < order.number; i++) {
         listing.push({
             cuponType: order.cuponType,
-            number: i, order: order._id
+            number: i, order: order._id,
+            code: faker.random.alphaNumeric(12)
         });
     }
     return cupon.create(listing);
@@ -209,13 +216,13 @@ export async function NotifyForPayment(order: order, mai: S_Mail) {
 }
 
 function remapDocsToList(d: cupon[]) {
-    return d.map((val: any) => {
+    let _arry = d.map((val: any) => {
         return {
             no: val.number,
-            code: '' + val['_id'] + ' '.toUpperCase(),
-            order: '' + val['order'] + ' '.toUpperCase()
+            code: '' + val['code'] + ' '.toUpperCase()
         }
     });
+    return orderBy(_arry, ['no'], 'asc');
 }
 
 export async function sendMail(order: order, d: any[]) {
