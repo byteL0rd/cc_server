@@ -37,6 +37,7 @@ order.add({
         ref: 'User',
         index: true
     },
+    // createdAt: { type: Date, expires: 3600 * 24 * 30 },
     cost: <keystone.FieldSpec>{ type: Types.Number, default: 0 },
     number: <keystone.FieldSpec>{ type: Types.Number, required: true, initial: true },
     remain: <keystone.FieldSpec>{ type: Types.Number, required: true, initial: true, index: true },
@@ -268,6 +269,7 @@ export interface order {
     cuponType: string,
     img: string,
     activated: string,
+    createdAt
 }
 
 export interface Order extends mongoose.Document {
@@ -285,5 +287,6 @@ export interface Order extends mongoose.Document {
     cost: number,
     cuponType: string,
     img: string,
-    activated: string
+    activated: string,
+    createdAt
 }

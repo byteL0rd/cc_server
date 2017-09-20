@@ -15,6 +15,8 @@ import { category } from '../../models/categs';
 export const _header = fs.readFileSync('views/partials/header.hbs').toString()
 export const _footer = fs.readFileSync('views/partials/footer.hbs').toString()
 
+import * as moment from 'moment'
+
 // compiling instutions
 
 const _instutions = fs.readFileSync('views/partials/navbar_sub_list.hbs').toString()
@@ -161,6 +163,7 @@ const forums = keystone.list('Forum').model;
         categories: await categories(),
         order: order,
         enabled: (order.activated === 'enabled') ? true : false,
+        expires: moment(order.createdAt || Date()).add(1, 'M').format("dd MM YYYY"),
         isAuth,
         comments
     });
@@ -256,7 +259,7 @@ const _about_us = ` ${htmlHead}
 <p class="uk-heading-primary" > About Us</p> 
 <p> ${process.env.About_Us || 'we are the great cuopons suplier'} </p> <br><br>
 <p class="uk-heading-primary" > Contact Us</p>
-<p> ${process.env.Contact_Us || 'email us at campouscuponsng@gmail.com'} </p> <br><br>
+<p> ${process.env.Contact_Us || 'email us at campuscouponsng@gmail.com'} </p> <br><br>
  ${htmlbody} ${_footer}`;
 export async function aboutUsPage(isAuth?: boolean, user?: user): Promise<string> {
     return handlebar.compile(_about_us)({

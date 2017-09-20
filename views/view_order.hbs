@@ -21,14 +21,16 @@
                     </div>
                     <div>
                         <div class="uk-card-body">
-                            <h3 class="uk-card-title uk-text-nowrap  uk-text-bold uk-text-small">{{ order.name }}</h3>
-                            <p class="uk-card-title uk-text-nowrap  uk-text-bold uk-text-small">{{ order.info  }}
-                                <br><br> <span class="uk-text-bold">location: </span> <br> {{order.address}}
+                            <h3 class="uk-card-title uk-text-nowrap  uk-text-bold uk-text-small">{{ expires }}</h3>
+                            <p class="uk-card-title uk-text-nowrap  uk-text-bold">{{ order.info  }}
                                 <br><span>email: {{ order.email}} </span> <br>
                                 <span style="padding-left: 2%" class="uk-flex uk-flex-left">{{ order.bizPhoneNo }}</span>
                                 <br><br> This Coupon  will cost you <span style="color: red; font-style: italic">{{order.cost}} kupos </span>
                             </p>
-                            <p> <span class="uk-card-title">{{order.cuponType}}</span> <br> <span> {{ order.bizPhoneNo }} </span>    
+                            <p> 
+                                <span class="uk-card-title">{{order.name}}</span> <br>
+                                <br><br> <span class="uk-text-bold">location: </span> <br> {{order.address}}   
+
                          </p>
                         {{#if enabled}} 
                            <div class="uk-flex uk-flex-right">
