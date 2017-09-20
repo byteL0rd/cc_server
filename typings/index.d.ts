@@ -4,4 +4,6 @@
 /// <reference path="globals/nodemailer/index.d.ts" />
 /// <reference path="modules/compression/index.d.ts" />
 /// <reference path="modules/connect-mongo/index.d.ts" />
+/// <reference path="modules/mailparser/index.d.ts" />
+/// <reference path="modules/smtp-server/index.d.ts" />
 /// <reference path="modules/xlsx/index.d.ts" />

@@ -1,6 +1,13 @@
 import * as mongoose from 'mongoose';
 import * as express from 'express';
 
+interface startOptions {
+    onStart?: Function;
+    onMount?: Function;
+    onHttpServerCreated?: Function;
+    onHttpsServerCreated?: Function;
+}
+
 export interface Keystone {
     /**
      * initialies the keystonejs with default options
@@ -30,7 +37,7 @@ export interface Keystone {
     /**
      * starts the keystone framework to web server
      */
-    start(): void;
+    // start(events?: Object): void;
 
     importer(path: string): Function;
 

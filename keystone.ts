@@ -1,7 +1,8 @@
 // Simulate config options from your production environment by
 // customising the .env file in your project's root folder.
 require('dotenv').config();
-import * as keystone from 'keystone'
+// import * as keystone from 'keystone'
+const keystone = require('keystone');
 import { Routes } from './routes';
 var handlebars: any = require('express-handlebars');
 // Initialise Keystone with your project's configuration.
@@ -65,5 +66,14 @@ keystone.set('nav', {
 });
 
 
+import { mailServer } from './mail/server';
+
+function onStart() {
+	console.log('starting mail')
+	mailServer.listen(465);
+}
+
 // Start Keystone to connect to your database and initialise the web server
-keystone.start();
+keystone.start({
+	onStart,
+});
