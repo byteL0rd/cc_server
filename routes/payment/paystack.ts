@@ -1,7 +1,9 @@
-const request = require('request-promise');
+// const request = require('request-promise');
 // const request = function (...args) {
 // 	return Promise.resolve(args);
 // }
+
+import * as request from 'request';
 
 const root = 'https://api.paystack.co';
 const API_KEY = process.env.PAYSTACK_SK_KEY;
