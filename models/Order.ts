@@ -17,7 +17,7 @@ const textSearch = require('mongoose-text-search');
 
 const Types = keystone.Field.Types;
 const order = new keystone.List('Order', {
-    track: true,
+    // track: true,
     index: true
 });
 
@@ -37,7 +37,7 @@ order.add({
         ref: 'User',
         index: true
     },
-    // createdAt: { type: Date, expires: 3600 * 24 * 30 },
+    createdAt: { type: Date, expires: 3600 * 24 * 30 },
     cost: <keystone.FieldSpec>{ type: Types.Number, default: 0 },
     number: <keystone.FieldSpec>{ type: Types.Number, required: true, initial: true },
     remain: <keystone.FieldSpec>{ type: Types.Number, required: true, initial: true, index: true },

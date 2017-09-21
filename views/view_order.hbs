@@ -21,10 +21,10 @@
                     </div>
                     <div>
                         <div class="uk-card-body">
-                            <h3 class="uk-card-title uk-text-nowrap  uk-text-bold uk-text-small">{{ expires }}</h3>
-                            <p class="uk-card-title uk-text-nowrap  uk-text-bold">{{ order.info  }} </p>
+                            <h3 class="uk-card-title uk-text-nowrap  uk-text-bold uk-text-small"> Expires: {{ expires }}</h3>
+                            <p class="uk-card-title  uk-text-bold">{{ order.info  }} </p>
                             <br>This Coupon  will cost you <span style="color: red; font-style: italic">{{order.cost}} kupos </span>
-                            <br> <span class="uk-text-small">location: {{order.address}} <br> email: {{ order.email}} </span>  
+                            <span class="uk-text-small">location: {{order.address}} <br> email: {{ order.email}} </span>  
                             <span style="padding-left: 2%" class="uk-flex uk-flex-left">{{ order.bizPhoneNo }}</span>
                             <span class="uk-card-title">{{order.name}}</span> 
                         {{#if enabled}} 

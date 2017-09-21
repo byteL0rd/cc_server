@@ -163,7 +163,7 @@ const forums = keystone.list('Forum').model;
         categories: await categories(),
         order: order,
         enabled: (order.activated === 'enabled') ? true : false,
-        expires: moment(order.createdAt || Date()).add(1, 'M').format("dd/MM/YYYY"),
+        expires: moment(order.createdAt || Date()).add(1, 'M'),
         isAuth,
         comments
     });
