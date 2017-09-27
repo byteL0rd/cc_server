@@ -65,12 +65,11 @@ keystone.set('nav', {
 	forums: 'forums'
 });
 
-
-import { mailServer } from './mail/server';
-
-function onStart() {
-	console.log('starting mail')
-	mailServer.listen(465);
+if (process.env.ssl) {
+	keystone.set('ssl key', process.env.SSL_KEY);
+	keystone.set('ssl cert', process.env.CERT);
+	keystone.set('ssl ca', process.env.SSL_CA);
+	keystone.set('ssl', process.env.SSL);	
 }
 
 // Start Keystone to connect to your database and initialise the web server

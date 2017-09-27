@@ -163,7 +163,7 @@ const forums = keystone.list('Forum').model;
         categories: await categories(),
         order: order,
         enabled: (order.activated === 'enabled') ? true : false,
-        expires: moment(order.createdAt || Date()).add(1, 'M'),
+        expires: moment(order.createdAt || Date()).add(1, 'M').format('dddd, MMMM Do YYYY, h:mm a'),
         isAuth,
         comments
     });
@@ -195,7 +195,8 @@ export async function cuponPage(cupon: cupon, order: order, isAuth: boolean, use
         headers: _header,
         navbar: await navbar(isAuth, user),
         cupon,
-        order
+        order,
+        expires: moment(order.createdAt || Date()).add(1, 'M').format('dddd, MMMM Do YYYY, h:mm a')
     });
 }
 
@@ -250,6 +251,7 @@ const htmlHead = `
 const htmlbody = `            </div>
 </div>
 </section>
+${_footer}
 </body>
 
 </html>`
@@ -259,8 +261,8 @@ const _about_us = ` ${htmlHead}
 <p class="uk-heading-primary" > About Us</p> 
 <p> ${process.env.About_Us || 'we are the great cuopons suplier'} </p> <br><br>
 <p class="uk-heading-primary" > Contact Us</p>
-<p> ${process.env.Contact_Us || 'email us at campuscouponsng@gmail.com'} </p> <br><br>
- ${htmlbody} ${_footer}`;
+<p> ${process.env.Contact_Us || 'email us at admin@campuscoupons.ng'} </p> <br><br>
+ ${htmlbody}`;
 export async function aboutUsPage(isAuth?: boolean, user?: user): Promise<string> {
     return handlebar.compile(_about_us)({
         headers: _header,
@@ -272,7 +274,7 @@ export async function aboutUsPage(isAuth?: boolean, user?: user): Promise<string
 
 // // compiling contact us page
 const _contactUs = `${htmlHead} <p class="uk-heading-primary" > Contact Us</p>
-<p> ${process.env.Contact_Us} </p> ${htmlbody} ${_footer}`;
+<p> ${process.env.Contact_Us} </p> ${htmlbody}`;
 export async function contactUsPage (isAuth?: boolean, user?: user): Promise<string> {
     return handlebar.compile(_contactUs)({
         headers: _header,
@@ -281,6 +283,31 @@ export async function contactUsPage (isAuth?: boolean, user?: user): Promise<str
     });
 }
 
+// // compiling How it works student guide page
+const _htwStudent = `${htmlHead} 
+    <p class="uk-heading-primary" > How It Works Student Guide </p>
+    <iframe src="http://docs.google.com/gview?url=http://campuscoupons.ng/docs/htwstudents.docx&embedded=true"></iframe>
+ ${htmlbody}`;
+export async function HTWStudentPage (isAuth?: boolean, user?: user): Promise<string> {
+    return handlebar.compile(_htwStudent)({
+        headers: _header,
+        categ: await categories(),
+        navbar: await navbar(isAuth, user),
+    });
+}
+
+// // compiling contact us page
+const _htwMerchant = `${htmlHead}
+ <p class="uk-heading-primary" > How It Works Merchant Guide </p>
+ <iframe src="http://docs.google.com/gview?url=http://campuscoupons.ng/docs/htwmerchants.docx&embedded=true"></iframe>
+${htmlbody}`;
+export async function HTWMerchantPage (isAuth?: boolean, user?: user): Promise<string> {
+    return handlebar.compile(_htwMerchant)({
+        headers: _header,
+        categ: await categories(),
+        navbar: await navbar(isAuth, user),
+    });
+}
 
 function paginator(totalPage: number, currentPage = 1, noListings = 5, steps = 3) {
     const listings = [];

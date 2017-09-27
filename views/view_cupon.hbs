@@ -5,44 +5,56 @@
     {{{ headers }}}
 </head>
 
-<body id="cupon_body">
+<body>
     {{{ navbar }}}
     <!-- desktop body -->
     <section class="cc_body">
         <div class="uk-grid-small  uk-flex-center uk-text-center" uk-grid>
-            <div class="uk-width-expand" style="padding-left: 10%; padding-right: 10%">
-                <div id="cupon_card" class="uk-card uk-card-default uk-grid-collapse uk-child-width-1-2@s uk-margin" uk-grid>
-                    <div class="uk-card-media-left uk-cover-container">
-                        <img src="{{order.image_upload}}" alt="" uk-cover>
-                        <canvas width="200" height="100"></canvas>
-                    </div>
+            <div id="cupon_body" class="uk-width-expand" style="padding-left: 10%; padding-right: 10%">
+                <div id="cupon_card" style="border-color: #201B1B; border-width: 2px">
+                    {{!-- img | details --}}
                     <div>
-                        <style>
-                            .cc_d_d {
-                                color: green;
-                            }
-
-                            .cc_d_s {
-                                color: black
-                            }
-                        </style>
-                        <div class="uk-card-body">
-                            <h3 class="uk-card-title uk-text-nowrap  uk-text-bold uk-text-small"> {{ order.name }} </h3>
-                            <p class="uk-text-small uk-text-meta">{{order.description}}
-                                <br><br> <span class="uk-text-bold">location: </span> <br> {{ order.address }}
-                                <br>
-                                <span style="padding-left: 2%" class="uk-flex uk-flex-left">{{order.bizPhoneNo}}</span>
-                                <br><br><span class="uk-text-uppercase cc_d_d uk-text-bold">Coupon No:</span> <span class="uk-text-bold cc_d_s"> {{cupon.number}}</span>
-                                <br> <span class="uk-text-uppercase cc_d_d uk-text-bold">Coupon code: </span> <span class="uk-text-bold uk-text-uppercase cc_d_s ">{{ cupon.code }}</span>                                <br>
-                            </p>
-                            <p> <span class="uk-card-title">{{order.cuponType}}</span> <br> <span class="uk-text-uppercase"> {{ order.name }} </span>                                </p>
+                        {{!-- image --}}
+                        <div style="max-width: 30%; min-width: 30%" class="">
+                            <img class="uk-responsive-width" src="{{order.image_upload}}">
                         </div>
+                        {{!-- details --}}
+                        <div style="min-width: 70%; max-width: 70%" class="uk-text-center">
+                            <div style="background-color: rgba(43, 30, 30, 0.76)">
+                                <h3 class="uk-card-title uk-text-nowrap  uk-text-bold uk-text-small" style="color: white"> {{ order.name }} </h3>
+                            </div>
+                            <div>
+                                <style>
+                                    .t-o {
+                                        overflow: hidden;
+                                        max-width: 75ch;
+                                        text-overflow: ellipsis;
+                                    }
+                                </style>
+                                <span class="t-o uk-text-small uk-text-lowercase"> {{ order.description }} </span>
+                            </div>
+                            <div>
+                                <p> <span class="uk-text-bold">Location</span> <br>
+                                    <span class="uk-text-small"> {{ order.address }} {{order.bizPhoneNo}} </span>
+                                </p>
+                            </div>
+                            <div class="uk-text-center">
+                                <p class="uk-text-bold"> <span class="uk-text-uppercase" style="color: green"> Coupon Code </span> <span> {{ cupon.number }} </span></p>
+                                <p class="uk-text-bold"> <span class="uk-text-uppercase" style="color: green">  Coupon Code </span> <span> {{ cupon.code }} </span></p>
+                            </div>
+                        </div>
+                    </div>
+                    {{!-- offer / expires --}}
+                    <div>
+                        <h3 class="uk-card-title uk-text-uppercase uk-text-bold">offer: {{ order.info }}</h3>
+                        <span class="uk-text-bold"> <span style="color: rgb(219,49, 60)">Valid Till: </span> {{ expires }}
+                        </span>
                     </div>
                 </div>
                 <div id="noty">
-                    <div uk-spinner></div> 
+                    <div uk-spinner></div>
                     <br>
-                    <span  hidden> downloading Coupon image please wait </span>
+                    <span hidden> downloading Coupon image please wait </span>
                 </div>
                 <button id="downBtn" style="background-color: rgb(0, 167, 89); color: white" class="uk-button  uk-button-small uk-text-capitalize">Download To Device</button>
                 <br> <span style="font-size: 50%"> click the Coupon code   or snapshot using phone .... android: vol[-] + power </span>
@@ -59,7 +71,7 @@
             $(id).on('click', (e) => {
                 $('#downBtn')[0].hidden = true;
                 $('#noty')[0].hidden = false;
-                {{!-- console.log(document.getElementById('cupon_body')) --}}
+                { { !--console.log(document.getElementById('cupon_body')) --}}
                 if (!clicked) {
                     clicked = !clicked;
                     $('#downBtn')[0].disabled = clicked

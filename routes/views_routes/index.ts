@@ -4,6 +4,7 @@ import * as render from 'express-es6-template-engine';
 import { viewLogin, viewSignUp, authLogin, authSignUp, authLogOut } from './auth';
 import { viewCreateOrders, viewOrders, viewOrder, createOrder } from './order';
 import { viewCupon } from './cupon';
+import { merchantHTWPage, studentHTWPage } from './htw';
 import * as passport from 'passport';
 import { genOrder } from './../../faker';
 import * as keystone from 'keystone';
@@ -76,6 +77,10 @@ module.exports = function routes(app: Application) {
 
     app.get('/aboutus', aboutUs);
     app.get('/contact', contactUs);
+
+    app.use('/htw/students', studentHTWPage);
+
+    app.use('/htw/merchants', merchantHTWPage);
 
 
     if (process.env.AdminEdit === 'enabled') {
