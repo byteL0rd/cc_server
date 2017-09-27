@@ -41,17 +41,15 @@
                                 </p>
                             </div>
                             <div style="text-align: center; padding-left: 25%" class="uk-text-center">
-                                <p class="uk-text-bold uk-text-center"> <span class="uk-text-uppercase" style="color: green"> Coupon Code </span> <span> {{ cupon.number }} </span></p>
-                                <p class="uk-text-bold uk-text-center"> <span class="uk-text-uppercase" style="color: green">  Coupon Code </span> <span> {{ cupon.code }} </span></p>
+                                <p class="uk-text-bold uk-text-center"> <span class="uk-text-uppercase" style="color: green"> Coupon No: </span> <span> {{ cupon.number }} </span></p>
+                                <p class="uk-text-bold uk-text-center"> <span class="uk-text-uppercase" style="color: green">  Coupon Code: </span> <span> {{ cupon.code }} </span></p>
+                                <h3 class="uk-card-title uk-text-uppercase uk-text-bold">offer: {{ order.info }}</h3>
+                                <span class="uk-text-bold"> <span style="color: rgb(219,49, 60)">Valid Till: </span> {{ expires }}
+                                </span>
                             </div>
                         </div>
                     </div>
                     {{!-- offer / expires --}}
-                    <div>
-                        <h3 class="uk-card-title uk-text-uppercase uk-text-bold">offer: {{ order.info }}</h3>
-                        <span class="uk-text-bold"> <span style="color: rgb(219,49, 60)">Valid Till: </span> {{ expires }}
-                        </span>
-                    </div>
                 </div>
                 <div id="noty">
                     <div uk-spinner></div>
