@@ -302,7 +302,10 @@ export async function HTWStudentPage (isAuth?: boolean, user?: user): Promise<st
 const _htwMerchant = `${htmlHead}
  <p class="uk-heading-primary" > How It Works Merchant Guide </p>
  <style>
-    .second-row { flex-grow: 1; border: none; margin: 0; padding: 0; }
+    .second-row { 
+        width: 100%;
+        height: 100%;
+        flex-grow: 1; border: none; margin: 0; padding: 0; }
  </style>
  <iframe class="second-row" src='https://view.officeapps.live.com/op/embed.aspx?src=http%3A%2F%2Fcampuscoupons%2Eng%3A80%2Fdocs%2Fhtwmerchants%2Edocx&wdStartOn=1'
  frameborder='0'>
