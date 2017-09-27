@@ -286,8 +286,14 @@ export async function contactUsPage (isAuth?: boolean, user?: user): Promise<str
 // // compiling How it works student guide page
 const _htwStudent = `${htmlHead} 
     <p class="uk-heading-primary" > How It Works Student Guide </p>
-    <iframe src='https://view.officeapps.live.com/op/embed.aspx?src=http%3A%2F%2Fcampuscoupons%2Eng%3A80%2Fdocs%2Fhtwstudents%2Edocx&wdStartOn=1'
-     width='476px' height='288px' frameborder='0'>This is an embedded <a target='_blank' href='https://office.com'>Microsoft Office</a> document,
+    <style>
+    .second-row { 
+        width: 100%;
+        height: 100%;
+        flex-grow: 1; border: none; margin: 0; padding: 0; }
+ </style>
+    <iframe class="second-row"  src='https://view.officeapps.live.com/op/embed.aspx?src=http%3A%2F%2Fcampuscoupons%2Eng%3A80%2Fdocs%2Fhtwstudents%2Edocx&wdStartOn=1'
+      frameborder='0'>This is an embedded <a target='_blank' href='https://office.com'>Microsoft Office</a> document,
      powered by <a target='_blank' href='https://office.com/webapps'>Office Online</a>.</iframe>
  ${htmlbody}`;
 export async function HTWStudentPage (isAuth?: boolean, user?: user): Promise<string> {

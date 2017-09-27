@@ -9,17 +9,19 @@
     {{{ navbar }}}
     <!-- desktop body -->
     <section class="cc_body">
-        <div class="uk-grid-small  uk-flex-center uk-text-center" uk-grid>
+        <div class="uk-grid-small  uk-flex-center" uk-grid>
             <div id="cupon_body" class="uk-width-expand" style="padding-left: 10%; padding-right: 10%">
                 <div id="cupon_card" style="border-color: #201B1B; border-width: 2px">
                     {{!-- img | details --}}
                     <div>
                         {{!-- image --}}
-                        <div style="max-width: 30%; min-width: 30%; display: inline-block" class="">
-                            <img class="uk-responsive-width" src="{{order.image_upload}}">
+                        <div style="width: 27%; display: inline-block" class="uk-cover-container">
+                            {{!-- <img class="uk-responsive-width" src="{{order.image_upload}}"> --}}
+                            <img src="{{order.image_upload}}" alt="" uk-cover>
+                             <canvas class="uk-responsive-width"></canvas>
                         </div>
                         {{!-- details --}}
-                        <div style="min-width: 70%; max-width: 70%; display: inline-block" class="uk-text-center">
+                        <div style="width: 63%; display: inline-block" class="uk-text-center">
                             <div style="background-color: rgba(43, 30, 30, 0.76)">
                                 <h3 class="uk-card-title uk-text-nowrap  uk-text-bold uk-text-small" style="color: white"> {{ order.name }} </h3>
                             </div>
