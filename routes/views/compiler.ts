@@ -301,8 +301,11 @@ export async function HTWStudentPage (isAuth?: boolean, user?: user): Promise<st
 // // compiling contact us page
 const _htwMerchant = `${htmlHead}
  <p class="uk-heading-primary" > How It Works Merchant Guide </p>
- <iframe src='https://view.officeapps.live.com/op/embed.aspx?src=http%3A%2F%2Fcampuscoupons%2Eng%3A80%2Fdocs%2Fhtwmerchants%2Edocx&wdStartOn=1'
-  width='476px' height='288px' frameborder='0'>
+ <style>
+    .second-row { flex-grow: 1; border: none; margin: 0; padding: 0; }
+ </style>
+ <iframe class="second-row" src='https://view.officeapps.live.com/op/embed.aspx?src=http%3A%2F%2Fcampuscoupons%2Eng%3A80%2Fdocs%2Fhtwmerchants%2Edocx&wdStartOn=1'
+ frameborder='0'>
  This is an embedded <a target='_blank' href='https://office.com'>
  Microsoft Office</a> 
  document, powered by <a target='_blank' href='https://office.com/webapps'>
