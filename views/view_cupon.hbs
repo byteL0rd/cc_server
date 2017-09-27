@@ -5,10 +5,10 @@
     {{{ headers }}}
 </head>
 
-<body>
+<body id="cupon_body">
     {{{ navbar }}}
     <!-- desktop body -->
-    <section id="cupon_body" class="cc_body">
+    <section  class="cc_body">
         <div class="uk-grid-small  uk-flex-center" uk-grid>
             <div  class="uk-width-expand" style="padding-left: 10%; padding-right: 10%">
                 <div id="cupon_card" style="border-color: #201B1B; border-width: 2px">
@@ -48,9 +48,11 @@
                     </div>
                     {{!-- offer / expires --}}
                     <div class="uk-flex uk-flex-center">
-                        <div class="uk-width-1-1"> <h3 class="uk-card-title uk-text-uppercase uk-text-bold">offer: {{ order.info }}</h3>  </div>
+                        <div class="uk-container-small">
+                            <div class="uk-width-1-1"> <h3 class="uk-card-title uk-text-uppercase uk-text-bold">offer: {{ order.info }}</h3>  </div>
                         <div class="uk-width-1-1">
                             <p class="uk-text-bold"> <span style="color: rgb(219,49, 60)">Valid Till: </span> {{ expires }}</p>
+                        </div>
                         </div>
                     </div>
                 </div>
