@@ -8,9 +8,9 @@
 <body>
     {{{ navbar }}}
     <!-- desktop body -->
-    <section class="cc_body">
+    <section id="cupon_body" class="cc_body">
         <div class="uk-grid-small  uk-flex-center" uk-grid>
-            <div id="cupon_body" class="uk-width-expand" style="padding-left: 10%; padding-right: 10%">
+            <div  class="uk-width-expand" style="padding-left: 10%; padding-right: 10%">
                 <div id="cupon_card" style="border-color: #201B1B; border-width: 2px">
                     {{!-- img | details --}}
                     <div class="uk-grid">
@@ -48,7 +48,7 @@
                     </div>
                     {{!-- offer / expires --}}
                     <div class="uk-flex uk-flex-center">
-                        <h3 class="uk-card-title uk-text-uppercase uk-text-bold">offer: {{ order.info }}</h3>
+                        <h3 class="uk-card-title uk-text-uppercase uk-text-bold">offer: {{ order.info }}</h3> <br>
                         <span class="uk-text-bold"> <span style="color: rgb(219,49, 60)">Valid Till: </span> {{ expires }}
                         </span>
                     </div>
@@ -63,7 +63,7 @@
             <span hidden> downloading Coupon image please wait </span>
         </div>
         <button id="downBtn" style="background-color: rgb(0, 167, 89); color: white" class="uk-button  uk-button-small uk-text-capitalize">Download To Device</button>
-        <br> <span style="font-size: 50%"> click the Coupon code   or snapshot using phone .... android: vol[-] + power </span>
+        <br><br> <span style="font-size: 50%"> click the Coupon code   or snapshot using phone .... android: vol[-] + power </span>
     </section>
     <script src="assets/html2canvas.min.js"></script>
     <script src="assets/FileSaver.min.js"></script>
