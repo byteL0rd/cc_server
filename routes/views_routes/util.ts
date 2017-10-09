@@ -48,10 +48,11 @@ export async function index(req: Request, res: Response) {
         perPage: 8,
         maxPages: 8,
     }).find(findQuery).exec(async (err, data: pagingQuery) => {
-        // console.log(data.results);
-        let results = [];
-        data = mapDefaultPQuery(data);
-        results = (!data.results) ? [] : results;
+        // console.log(data.resulcts);
+        // let results = [];
+        // data = mapDefaultPQuery(data);
+        // results = (!data.results) ? [] : results;
+        console.log(data, req.user, findQuery);
         res.send(await indexPage(data.results, {
             cutp: data.currentPage,
             totp: data.totalPages
