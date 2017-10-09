@@ -35,7 +35,7 @@ keystone.init({
 
 // Load your project's Models
 // keystone.import('models');
-((k: {import: Function}) => { k.import('models') })(keystone as any);
+((k: { import: Function }) => { k.import('models') })(keystone as any);
 
 // console.log(keystone)
 
@@ -65,12 +65,10 @@ keystone.set('nav', {
 	forums: 'forums'
 });
 
-// if (process.env.ssl) {
-// 	keystone.set('ssl key', process.env.SSL_KEY);
-// 	keystone.set('ssl cert', process.env.CERT);
-// 	keystone.set('ssl ca', process.env.SSL_CA);
-// 	keystone.set('ssl', process.env.SSL);	
-// }
+keystone.set('ssl key', './tls/server.key');
+keystone.set('ssl cert', './tls/server.crt');
+keystone.set('ssl ca', './tls/server.ca');
+keystone.set('ssl', true);
 
 // Start Keystone to connect to your database and initialise the web server
 keystone.start();

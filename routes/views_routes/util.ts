@@ -52,7 +52,6 @@ export async function index(req: Request, res: Response) {
         // let results = [];
         // data = mapDefaultPQuery(data);
         // results = (!data.results) ? [] : results;
-        console.log(data, req.user, findQuery);
         res.send(await indexPage(data.results, {
             cutp: data.currentPage,
             totp: data.totalPages
