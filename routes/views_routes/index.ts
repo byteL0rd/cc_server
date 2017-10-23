@@ -1,7 +1,7 @@
 import { index, view_create_token, review, searchResultPage, aboutUs, contactUs, paystackCardPage, paymentGateWay } from './util'
 import { Application } from 'express';
 import * as render from 'express-es6-template-engine';
-import { viewLogin, viewSignUp, authLogin, authSignUp, authLogOut } from './auth';
+import { viewLogin, viewSignUp, authLogin, authSignUp, authLogOut, authVerifyJwt } from './auth';
 import { viewCreateOrders, viewOrders, viewOrder, createOrder } from './order';
 import { viewCupon } from './cupon';
 import { merchantHTWPage, studentHTWPage } from './htw';
@@ -43,17 +43,20 @@ module.exports = function routes(app: Application) {
 
     // adds compression for serving static files    
     app.use('/*', compression());
-
+	
     // renders the homepage    
     app.get('/', index);
-
+	
     // renders the login page 
     app.get('/login', viewLogin)
     app.use('/login', authLogin);
-
+	
     // renders the signup page 
     app.get('/signup', viewSignUp)
     app.use('/signup', authSignUp);
+	
+	// verifys the user account
+	app.use('/verify', authVerifyJwt);
 
     // renders page to view others
     // renders a page to create an other
@@ -80,7 +83,7 @@ module.exports = function routes(app: Application) {
 
     app.use('/htw/students', studentHTWPage);
 
-    app.use('/htw/merchants', merchantHTWPage);
+	app.use('/htw/merchants', merchantHTWPage);
 
 
     if (process.env.AdminEdit === 'enabled') {

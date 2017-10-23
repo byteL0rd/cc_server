@@ -19,6 +19,7 @@ User.add({
 	email: <keystone.FieldSpec>{ type: Types.Email, initial: true, required: true, unique: true, index: true },
 	password: { type: Types.Password, initial: true, required: true, min: 8 },
 	institution: <keystone.FieldSpec>{ type: Types.Text, required: true, initial: true },
+	activated: <keystone.FieldSpec>{ type: Types.Boolean, default: false },
 }, 'Permissions', {
 		isAdmin: { type: Boolean, label: 'Can access Keystone', index: true },
 	});
